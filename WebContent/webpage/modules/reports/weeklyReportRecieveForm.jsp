@@ -112,10 +112,10 @@
 					<tr>
 						<th class="hide"></th>
 						<th width="40">项目</th>
-						<th width="60">任务类型</th>
+						<th width="80">任务类型</th>
 						<th width="220">任务描述</th>
 						<th width="220">进展情况描述</th>
-						<th width="60">任务状态</th>
+						<th width="80">任务状态</th>
 						<th width="20">花费时间(天)</th>
 						<th width="10">&nbsp;</th>
 					</tr>
@@ -135,7 +135,7 @@
 						<input id="weeklyReportDetailList{{idx}}_project" name="weeklyReportDetailList[{{idx}}].project" type="text" value="{{row.project}}"  disabled="disabled"  class="form-control required" maxlength=50/>
 					</td>
 
-					<td width="60">
+					<td width="80">
 						<input id="weeklyReportDetailList{{idx}}_taskType" name="weeklyReportDetailList[{{idx}}].tasktype" type="text" value="{{row.tasktype}}"  disabled="disabled"  class="form-control required" maxlength=50/>
 					</td>
 
@@ -149,7 +149,7 @@
 					</td>
 
 
-					<td width="60">
+					<td width="80">
 						<input id="weeklyReportDetailList{{idx}}_taskStatus" name="weeklyReportDetailList[{{idx}}].taskstatus" type="text" value="{{row.taskstatus}}"  disabled="disabled"  class="form-control required " maxlength=50/>
 					</td>
 
@@ -192,10 +192,10 @@
 					<tr>
 						<th class="hide"></th>
 						<th width="40">项目</th>
-						<th width="60">任务类型</th>
+						<th width="80">任务类型</th>
 						<th width="220">任务描述</th>
 						<th width="220">计划进行任务方向</th>
-						<th width="60">任务状态</th>
+						<th width="80">任务状态</th>
 						<th width="20">花费时间(天)</th>
 						<th width="10">&nbsp;</th>
 					</tr>
@@ -215,7 +215,7 @@
 						<input id="weeklyReportDetailListKey{{idx}}_project" name="weeklyReportDetailListKey[{{idx}}].project" type="text" value="{{row.project}}"  disabled="disabled"  class="form-control required" maxlength=50/>
 					</td>
 
-					<td width="60">
+					<td width="80">
 						<input id="weeklyReportDetailListKey{{idx}}_taskType" name="weeklyReportDetailListKey[{{idx}}].tasktype" type="text" value="{{row.tasktype}}"  disabled="disabled"  class="form-control required" maxlength=50/>
 					</td>
 
@@ -229,7 +229,7 @@
 					</td>
 
 
-					<td width="60">
+					<td width="80">
 						<input id="weeklyReportDetailListKey{{idx}}_taskStatus" name="weeklyReportDetailListKey[{{idx}}].taskstatus" type="text" value="{{row.taskstatus}}"  disabled="disabled"  class="form-control required " maxlength=50/>
 					</td>
 

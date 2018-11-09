@@ -197,10 +197,10 @@
 								<tr>
 									<th class="hide"></th>
 									<th width="40">项目</th>
-									<th width="60">任务类型</th>
+									<th width="80">任务类型</th>
 									<th width="220">任务描述</th>
 									<th width="220">进展情况描述</th>
-									<th width="60">任务状态</th>
+									<th width="80">任务状态</th>
 									<th width="20">花费时间(天)</th>
 									<th width="10">&nbsp;</th>
 								</tr>
@@ -220,12 +220,11 @@
 						<input id="weeklyReportDetailList{{idx}}_project" name="weeklyReportDetailList[{{idx}}].project" type="text" value="{{row.project}}"    class="form-control required" maxlength=50/>
 					</td>
 
-					<td width="60">
-						<input id="weeklyReportDetailList{{idx}}_taskType" name="weeklyReportDetailList[{{idx}}].tasktype" type="text" value="{{row.tasktype}}"    class="form-control required" maxlength=50 list="browsers"/>
-						<datalist id="browsers">
-							<option value="计划内">
-							<option value="计划外">
-						</datalist>
+					<td width="80">
+						<select id="weeklyReportDetailList{{idx}}_taskType" name="weeklyReportDetailList[{{idx}}].tasktype" data-value="{{row.tasktype}}" class="form-control m-b  required">
+							<option value="计划内">计划内</option>
+							<option value="计划外">计划外</option>
+						</select>
 					</td>
 
 					<td width="220">
@@ -238,13 +237,12 @@
 					</td>
 
 
-					<td width="60">
-						<input id="weeklyReportDetailList{{idx}}_taskStatus" name="weeklyReportDetailList[{{idx}}].taskstatus" type="text" value="{{row.taskstatus}}"    class="form-control required " maxlength=50 list="status"/>
-						<datalist id="status">
-							<option value="完成">
-							<option value="进行中">
-							<option value="暂停执行">
-						</datalist>
+					<td width="80">
+						<select id="weeklyReportDetailList{{idx}}_taskStatus" name="weeklyReportDetailList[{{idx}}].taskstatus" data-value="{{row.taskstatus}}" class="form-control m-b  required">
+							<option value="完成">完成</option>
+							<option value="进行中">进行中</option>
+							<option value="暂停执行">暂停执行</option>
+						</select>
 					</td>
 
 
@@ -293,10 +291,10 @@
 					<tr>
 						<th class="hide"></th>
 						<th width="40">项目</th>
-						<th width="60">任务类型</th>
+						<th width="80">任务类型</th>
 						<th width="220">任务描述</th>
 						<th width="220">计划进行任务方向</th>
-						<th width="60">任务状态</th>
+						<th width="80">任务状态</th>
 						<th width="20">花费时间(天)</th>
 						<th width="10">&nbsp;</th>
 					</tr>
@@ -316,12 +314,11 @@
 						<input id="weeklyReportDetailListKey{{idx}}_project" name="weeklyReportDetailListKey[{{idx}}].project" type="text" value="{{row.project}}"    class="form-control required" maxlength=50/>
 					</td>
 
-					<td width="60">
-						<input id="weeklyReportDetailListKey{{idx}}_taskType" name="weeklyReportDetailListKey[{{idx}}].tasktype" type="text" value="{{row.tasktype}}"    class="form-control required" maxlength=50 list="browsers1"/>
-						<datalist id="browsers1">
-							<option value="上级分配">
-							<option value="自主计划">
-						</datalist>
+					<td width="80">
+						<select id="weeklyReportDetailListKey{{idx}}_taskType" name="weeklyReportDetailListKey[{{idx}}].tasktype" data-value="{{row.tasktype}}" class="form-control m-b  required">
+							<option value="上级分配">上级分配</option>
+							<option value="自主计划">自主计划</option>
+						</select>
 					</td>
 
 					<td width="220">
@@ -334,12 +331,11 @@
 					</td>
 
 
-					<td width="60">
-						<input id="weeklyReportDetailListKey{{idx}}_taskStatus" name="weeklyReportDetailListKey[{{idx}}].taskstatus" type="text" value="{{row.taskstatus}}"    class="form-control required " maxlength=50 list="status1"/>
-						<datalist id="status1">
-							<option value="继续上周">
-							<option value="开始">
-						</datalist>
+					<td width="80">
+						<select id="weeklyReportDetailListKey{{idx}}_taskStatus" name="weeklyReportDetailListKey[{{idx}}].taskstatus" data-value="{{row.taskstatus}}" class="form-control m-b  required">
+							<option value="继续上周">继续上周</option>
+							<option value="开始">开始</option>
+						</select>
 					</td>
 
 
