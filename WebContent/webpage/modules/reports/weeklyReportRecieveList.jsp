@@ -103,7 +103,7 @@
 				<th class="sort-column username">员工姓名</th>
 				<th class="sort-column officename">部门</th>
 				<th class="sort-column stationname">岗位</th>
-				<th class="sort-column create_date">填表日期</th>
+				<th class="sort-column a.create_date">填表日期</th>
 				<th class="sort-column title">周报标题</th>
 				<th>操作</th>
 			</tr>

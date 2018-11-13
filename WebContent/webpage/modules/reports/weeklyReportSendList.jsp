@@ -70,8 +70,8 @@
 			<tr>
 				<th  class="sort-column officename">部门</th>
 				<th>岗位</th>
-				<th  class="sort-column create_date">填写日期</th>
-				<th  class="sort-column selfscore">周报标题</th>
+				<th  class="sort-column a.create_date">填写日期</th>
+				<th  class="sort-column title">周报标题</th>
 				<th>操作</th>
 			</tr>
 		</thead>

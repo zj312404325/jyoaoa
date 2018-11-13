@@ -154,10 +154,13 @@ public class WeeklyReportController extends BaseController{
             Calendar c = Calendar.getInstance();
             c.setTime(tm);
 
+            int index=c.get(Calendar.DAY_OF_WEEK);
+
             if (c.get(Calendar.DAY_OF_WEEK) == 1) {
                 c.add(Calendar.DATE, -1);
             }
-            Calendar cf = Calendar.getInstance();
+
+            /*Calendar cf = Calendar.getInstance();
             cf.setTime(c.getTime());
             cf.set(Calendar.DAY_OF_WEEK, cf.getFirstDayOfWeek());
             cf.add(Calendar.DATE, -6);
@@ -174,7 +177,49 @@ public class WeeklyReportController extends BaseController{
             ce.set(Calendar.SECOND, 59);
             System.out.println(sdf.format(tm));
             System.out.println("第一天:" + sdf.format(cf.getTime()));
-            System.out.println("第七天:" + sdf.format(ce.getTime()));
+            System.out.println("第七天:" + sdf.format(ce.getTime()));*/
+
+            Calendar cf = Calendar.getInstance();
+            Calendar ce = Calendar.getInstance();
+
+            if(index >=2 && index <=5){
+                cf.setTime(c.getTime());
+                cf.set(Calendar.DAY_OF_WEEK, cf.getFirstDayOfWeek());
+                cf.add(Calendar.DATE, -9);
+                cf.set(Calendar.HOUR_OF_DAY, 0);
+                cf.set(Calendar.MINUTE, 0);
+                cf.set(Calendar.SECOND, 0);
+
+                ce.setTime(c.getTime());
+                ce.set(Calendar.DAY_OF_WEEK, cf.getFirstDayOfWeek() + 6);
+                ce.add(Calendar.DATE, -9);
+                ce.set(Calendar.HOUR_OF_DAY, 23);
+                ce.set(Calendar.MINUTE, 59);
+                ce.set(Calendar.SECOND, 59);
+
+                System.out.println(sdf.format(tm));
+                System.out.println("上上周五:" + sdf.format(cf.getTime()));
+                System.out.println("上周四:" + sdf.format(ce.getTime()));
+            }
+            else{
+                cf.setTime(c.getTime());
+                cf.set(Calendar.DAY_OF_WEEK, cf.getFirstDayOfWeek());
+                cf.add(Calendar.DATE, -2);
+                cf.set(Calendar.HOUR_OF_DAY, 0);
+                cf.set(Calendar.MINUTE, 0);
+                cf.set(Calendar.SECOND, 0);
+
+                ce.setTime(c.getTime());
+                ce.set(Calendar.DAY_OF_WEEK, cf.getFirstDayOfWeek() + 6);
+                ce.add(Calendar.DATE, -2);
+                ce.set(Calendar.HOUR_OF_DAY, 23);
+                ce.set(Calendar.MINUTE, 59);
+                ce.set(Calendar.SECOND, 59);
+                System.out.println(sdf.format(tm));
+                System.out.println("上周五:" + sdf.format(cf.getTime()));
+                System.out.println("本周四:" + sdf.format(ce.getTime()));
+            }
+
             Date beginDate = cf.getTime();
             Date endDate = ce.getTime();
             User user = UserUtils.getUser();
@@ -242,10 +287,12 @@ public class WeeklyReportController extends BaseController{
             Calendar c = Calendar.getInstance();
             c.setTime(tm);
 
+            int index=c.get(Calendar.DAY_OF_WEEK);
             if(c.get(Calendar.DAY_OF_WEEK)==1){
                 c.add(Calendar.DATE, -1);
             }
-            Calendar cf = Calendar.getInstance();
+
+            /*Calendar cf = Calendar.getInstance();
             cf.setTime(c.getTime());
             cf.set(Calendar.DAY_OF_WEEK, cf.getFirstDayOfWeek());
             cf.add(Calendar.DATE, 1);
@@ -262,7 +309,49 @@ public class WeeklyReportController extends BaseController{
             ce.set(Calendar.SECOND, 59);
             System.out.println(sdf.format(tm));
             System.out.println("第一天:"+sdf.format(cf.getTime()));
-            System.out.println("第七天:"+sdf.format(ce.getTime()));
+            System.out.println("第七天:"+sdf.format(ce.getTime()));*/
+
+            Calendar cf = Calendar.getInstance();
+            Calendar ce = Calendar.getInstance();
+
+            if(index >=2 && index <=5){
+                cf.setTime(c.getTime());
+                cf.set(Calendar.DAY_OF_WEEK, cf.getFirstDayOfWeek());
+                cf.add(Calendar.DATE, -2);
+                cf.set(Calendar.HOUR_OF_DAY, 0);
+                cf.set(Calendar.MINUTE, 0);
+                cf.set(Calendar.SECOND, 0);
+
+                ce.setTime(c.getTime());
+                ce.set(Calendar.DAY_OF_WEEK, cf.getFirstDayOfWeek() + 6);
+                ce.add(Calendar.DATE, -2);
+                ce.set(Calendar.HOUR_OF_DAY, 23);
+                ce.set(Calendar.MINUTE, 59);
+                ce.set(Calendar.SECOND, 59);
+
+                System.out.println(sdf.format(tm));
+                System.out.println("上周五:" + sdf.format(cf.getTime()));
+                System.out.println("本周四:" + sdf.format(ce.getTime()));
+            }
+            else{
+                cf.setTime(c.getTime());
+                cf.set(Calendar.DAY_OF_WEEK, cf.getFirstDayOfWeek());
+                cf.add(Calendar.DATE, 5);
+                cf.set(Calendar.HOUR_OF_DAY, 0);
+                cf.set(Calendar.MINUTE, 0);
+                cf.set(Calendar.SECOND, 0);
+
+                ce.setTime(c.getTime());
+                ce.set(Calendar.DAY_OF_WEEK, cf.getFirstDayOfWeek() + 6);
+                ce.add(Calendar.DATE, 5);
+                ce.set(Calendar.HOUR_OF_DAY, 23);
+                ce.set(Calendar.MINUTE, 59);
+                ce.set(Calendar.SECOND, 59);
+                System.out.println(sdf.format(tm));
+                System.out.println("本周五:" + sdf.format(cf.getTime()));
+                System.out.println("下周四:" + sdf.format(ce.getTime()));
+            }
+
             Date beginDate = cf.getTime();
             Date endDate = ce.getTime();
 
