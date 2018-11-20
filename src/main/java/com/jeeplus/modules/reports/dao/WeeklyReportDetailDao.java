@@ -35,4 +35,18 @@ public interface WeeklyReportDetailDao extends CrudDao<WeeklyReportDetail> {
      * @return List<WeeklyReportDetail>
      */
     public List<WeeklyReportDetail> findSumList(WeeklyReportDetail weeklyReportDetail);
+
+    /**
+     * 统计上周人数
+     * @param weeklyReportDetail
+     * @return List<WeeklyReportDetail>
+     */
+    public List<WeeklyReportDetail> findLastCountList(WeeklyReportDetail weeklyReportDetail);
+
+    /**
+     * 统计本周人数
+     * @param weeklyReportDetail
+     * @return List<WeeklyReportDetail>
+     */
+    public List<WeeklyReportDetail> findThisCountList(WeeklyReportDetail weeklyReportDetail);
 }

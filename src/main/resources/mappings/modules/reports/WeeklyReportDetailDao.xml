@@ -27,6 +27,11 @@
 		sum(a.cost_days) AS "costDays",
 		a.project AS "project"
 	</sql>
+
+	<sql id="weeklyReportDetailCountColumns">
+		a.create_by AS "createBy.id",
+		b.username AS "username"
+	</sql>
 	
 	<sql id="weeklyReportDetailJoins">
 		LEFT JOIN weeklyreport b ON b.id = a.weeklyreportid
@@ -130,6 +135,50 @@
 			</if>
 		</where>
 		GROUP BY a.create_by,a.project,b.username
+	</select>
+
+	<select id="findLastCountList" resultType="WeeklyReportDetail" >
+		SELECT
+		<include refid="weeklyReportDetailCountColumns"/>
+		FROM weeklyreportdetail a
+		<include refid="weeklyReportDetailJoins"/>
+		<include refid="weeklyReportJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.week_flag=0
+			<if test="weeklyreport.startdate != null and weeklyreport.startdate != ''">
+				AND <![CDATA[to_char(b.create_date,'yyyy-mm-dd')>=to_char(#{weeklyreport.startdate},'yyyy-mm-dd') ]]>
+			</if>
+			<if test="weeklyreport.enddate != null and weeklyreport.enddate != ''">
+				AND <![CDATA[to_char(b.create_date,'yyyy-mm-dd')<=to_char(#{weeklyreport.enddate},'yyyy-mm-dd') ]]>
+			</if>
+			<if test="weeklyreport.sqlstr != null">
+				AND (${weeklyreport.sqlstr})
+			</if>
+		</where>
+		GROUP BY a.create_by,b.username
+	</select>
+
+	<select id="findThisCountList" resultType="WeeklyReportDetail" >
+		SELECT
+		<include refid="weeklyReportDetailCountColumns"/>
+		FROM weeklyreportdetail a
+		<include refid="weeklyReportDetailJoins"/>
+		<include refid="weeklyReportJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.week_flag=1
+			<if test="weeklyreport.startdate != null and weeklyreport.startdate != ''">
+				AND <![CDATA[to_char(b.create_date,'yyyy-mm-dd')>=to_char(#{weeklyreport.startdate},'yyyy-mm-dd') ]]>
+			</if>
+			<if test="weeklyreport.enddate != null and weeklyreport.enddate != ''">
+				AND <![CDATA[to_char(b.create_date,'yyyy-mm-dd')<=to_char(#{weeklyreport.enddate},'yyyy-mm-dd') ]]>
+			</if>
+			<if test="weeklyreport.sqlstr != null">
+				AND (${weeklyreport.sqlstr})
+			</if>
+		</where>
+		GROUP BY a.create_by,b.username
 	</select>
 	
 	<select id="findAllList" resultType="WeeklyReportDetail" >

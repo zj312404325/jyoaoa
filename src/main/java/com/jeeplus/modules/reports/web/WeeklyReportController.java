@@ -586,6 +586,28 @@ public class WeeklyReportController extends BaseController{
             }
         });
 
+        //人数统计统计
+        if(FormatUtil.isNoEmpty(checkUserList)&&checkUserList.size()>0){
+            StringBuilder sqlstr=new StringBuilder();
+            for (int i = 0; i < checkUserList.size(); i++) {
+                sqlstr.append(" ((b.officeid='"+checkUserList.get(i).getCheckofficeid()+"' or o.parent_ids like '%"+checkUserList.get(i).getCheckofficeid()+"%') and b.stationid='"+checkUserList.get(i).getStationId()+"') or");
+            }
+            String ids=sqlstr.toString();
+            if(FormatUtil.isNoEmpty(ids)){
+                ids=sqlstr.toString().substring(0,ids.length()-2);
+            }
+            weeklyReport.setSqlstr(ids);
+        }
+
+        List<WeeklyReportDetail> resultList=Lists.newArrayList();
+        if("0".equalsIgnoreCase(type)) {
+            resultList = weeklyReportService.findLastCountList(weeklyReport);
+        }
+        else{
+            resultList = weeklyReportService.findThisCountList(weeklyReport);
+        }
+
+        model.addAttribute("count", resultList.size());
         model.addAttribute("weeklyReportDetail", list);
         model.addAttribute("weeklyReport", weeklyReport);
         return "modules/reports/weeklyReportViewList";
@@ -631,6 +653,11 @@ public class WeeklyReportController extends BaseController{
             }
         });
 
+        //人数统计
+        List<WeeklyReportDetail> countList=Lists.newArrayList();
+        countList = weeklyReportService.findLastCountList(weeklyReport);
+
+        model.addAttribute("count", countList.size());
         model.addAttribute("weeklyReportDetail", resultList);
         model.addAttribute("weeklyReport", weeklyReport);
         return "modules/reports/weeklyReportSumList";

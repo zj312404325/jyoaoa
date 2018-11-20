@@ -39,6 +39,9 @@
 			<span>结束时间：</span>
 			<input id="enddate" name="enddate" disabled="disabled" type="text" maxlength="20" class="laydate-icon form-control layer-date required"
 				   value="<fmt:formatDate value="${weeklyReport.enddate}" pattern="yyyy-MM-dd"/>"/>
+
+			<span>总计人数：</span>
+			<input id="count" name="count" disabled="disabled" type="text" value="${count}"/>
 		</div>
 	</form:form>
 	
