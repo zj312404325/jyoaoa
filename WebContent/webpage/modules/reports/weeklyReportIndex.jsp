@@ -24,6 +24,8 @@
 	                </li>
 	                <li class="<c:if test="${type!=null&&type=='1' }">active</c:if>"><a data-toggle="tab" href="#tab-2" aria-expanded="false">我收到的</a>
 	                </li>
+					<li class="<c:if test="${type!=null&&type=='2' }">active</c:if>"><a data-toggle="tab" href="#tab-3" aria-expanded="false">部门周报</a>
+					</li>
 	            </ul>
 	        	<div class="tab-content" style="height:100%">
 	            	<div id="tab-1" class="tab-pane <c:if test="${type!=null&&type=='0' }">active</c:if>" style="height:100%">
@@ -36,6 +38,11 @@
 	                    	<iframe id="contentIframe2" src="${ctx }/checkmodel/reports/list?${repage}&cat=receive" style="width:100%;height:100%" frameborder="0"></iframe>
 	                    </div>
 	                </div>
+					<div id="tab-3" class="tab-pane <c:if test="${type!=null&&type=='2' }">active</c:if>" style="height:100%">
+						<div class="panel-body" style="height:100%">
+							<iframe id="contentIframe3" src="${ctx }/checkmodel/reports/list?${repage}&cat=depart" style="width:100%;height:100%" frameborder="0"></iframe>
+						</div>
+					</div>
 	           	</div>
 	            	
 	    	</div>

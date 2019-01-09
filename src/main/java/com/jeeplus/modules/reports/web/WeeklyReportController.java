@@ -107,6 +107,12 @@ public class WeeklyReportController extends BaseController{
             model.addAttribute("page", page);
             return "modules/reports/weeklyReportRecieveList";
         }
+        if(FormatUtil.isNoEmpty(request.getParameter("cat"))&& ("depart".equals(request.getParameter("cat")))){
+            weeklyReport.setOfficeid(user.getOffice().getId());
+            Page<WeeklyReport> page = weeklyReportService.findPage(new Page<WeeklyReport>(request, response), weeklyReport);
+            model.addAttribute("page", page);
+            return "modules/reports/weeklyReportDepartList";
+        }
         weeklyReport.setCreateBy(user);
         Page<WeeklyReport> page = weeklyReportService.findPage(new Page<WeeklyReport>(request, response), weeklyReport);
         model.addAttribute("page", page);
