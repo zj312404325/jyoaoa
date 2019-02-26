@@ -10,7 +10,8 @@
 		a.update_date AS "updateDate",
 		a.remarks AS "remarks",
 		a.del_flag AS "delFlag",
-		a.question AS "question"
+		a.question AS "question",
+		a.title AS "title"
 	</sql>
 	
 	<sql id="oaquestionJoins">
@@ -22,7 +23,7 @@
 		SELECT 
 			<include refid="oaquestionColumns"/>
 		FROM oaquestion a
-		<include refid="oaquestionJoins"/>
+		<!--<include refid="oaquestionJoins"/>-->
 		WHERE a.id = #{id}
 	</select>
 	
@@ -47,6 +48,9 @@
             <if test="hasanswer != null and hasanswer != '' and hasanswer == 'no' ">
                 AND (select count(1) from oaanswer an2 where an2.quertionid = a.id) = 0
             </if>
+			<if test="myquestion != null and myquestion != '' and myquestion == 'yes' ">
+				  AND a.create_by = #{createBy.id}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -85,7 +89,8 @@
 			update_date,
 			remarks,
 			del_flag,
-			question
+			question,
+			title
 		) VALUES (
 			#{id},
 			#{createBy.id},
@@ -94,7 +99,8 @@
 			#{updateDate},
 			#{remarks},
 			#{delFlag},
-			#{question}
+			#{question},
+			#{title}
 		)
 	</insert>
 	
@@ -103,7 +109,8 @@
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
 			remarks = #{remarks},
-			question = #{question}
+			question = #{question},
+			title = #{title}
 		WHERE id = #{id}
 	</update>
 	

@@ -19,9 +19,12 @@ public class Oaquestion extends DataEntity<Oaquestion> {
 	private static final long serialVersionUID = 1L;
 	private String question;		// 问
 	private String var1;
+	//主题
+	private String title;
 	private List<Oaanswer> oaanswerList = Lists.newArrayList();		// 子表列表
 	private int answercount;// not db
 	private String hasanswer;// not db
+	private String myquestion;// not db
 	
 	public Oaquestion() {
 		super();
@@ -70,5 +73,21 @@ public class Oaquestion extends DataEntity<Oaquestion> {
 
 	public void setHasanswer(String hasanswer) {
 		this.hasanswer = hasanswer;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getMyquestion() {
+		return myquestion;
+	}
+
+	public void setMyquestion(String myquestion) {
+		this.myquestion = myquestion;
 	}
 }

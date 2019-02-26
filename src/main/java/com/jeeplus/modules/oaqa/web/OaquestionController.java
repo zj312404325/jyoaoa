@@ -13,6 +13,7 @@ import com.jeeplus.common.web.BaseController;
 import com.jeeplus.modules.oaqa.dao.OaanswerDao;
 import com.jeeplus.modules.oaqa.entity.Oaanswer;
 import com.jeeplus.modules.oaqa.entity.Oaquestion;
+import com.jeeplus.modules.oaqa.service.OaanswerService;
 import com.jeeplus.modules.oaqa.service.OaquestionService;
 import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.sys.utils.UserUtils;
@@ -54,6 +55,9 @@ public class OaquestionController extends BaseController {
 	private OaquestionService oaquestionService;
 
 	@Autowired
+	private OaanswerService oaanswerService;
+
+	@Autowired
 	private OaanswerDao oaanswerDao;
 	
 	@ModelAttribute
@@ -84,24 +88,48 @@ public class OaquestionController extends BaseController {
 		if(FormatUtil.isNoEmpty(request.getParameter("var1"))){
 			oaquestion.setVar1(java.net.URLDecoder.decode(request.getParameter("var1"), "utf-8"));
 		}
+		if(FormatUtil.isNoEmpty(request.getParameter("myquestion"))) {
+			if (request.getParameter("myquestion").equals("yes")) {
+				oaquestion.setCreateBy(UserUtils.getUser());
+				oaquestion.setMyquestion("yes");
+			}
+		}
 		Page<Oaquestion> page = oaquestionService.findPage(new Page<Oaquestion>(request, response), oaquestion);
 		for(Oaquestion q : page.getList()){
 			q.setOaanswerList(oaanswerDao.findList(new Oaanswer(q)));
 		}
 		model.addAttribute("page", page);
 		model.addAttribute("var1", request.getParameter("var1"));
+		model.addAttribute("myquestion", request.getParameter("myquestion"));
 		model.addAttribute("oaquestion", oaquestion);
 		model.addAttribute("loginUser", UserUtils.getUser());
 		return "modules/oaqa/oaquestionList";
 	}
+
+    /**
+     * 详情页面
+     */
+    @RequestMapping(value = "detail")
+    public String detail(Oaquestion oaquestion, Model model, RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) throws HttpException, IOException {
+        response.setHeader("Content-Type", "text/html;charset=utf-8");
+
+		Oaanswer oaanswer=new Oaanswer();
+		oaanswer.setQuertionid(oaquestion.getId());
+		Page<Oaanswer> page = oaanswerService.findPage(new Page<Oaanswer>(request, response), oaanswer);
+
+        model.addAttribute("oaquestion", oaquestion);
+		model.addAttribute("page", page);
+        return "modules/oaqa/oaquestionDetail";
+    }
 
 	/**
 	 * 查看，增加，编辑信息表单页面
 	 */
 	@RequiresPermissions(value={"oaqa:oaquestion:view","oaqa:oaquestion:add","oaqa:oaquestion:edit"},logical=Logical.OR)
 	@RequestMapping(value = "form")
-	public String form(Oaquestion oaquestion, Model model) {
+	public String form(Oaquestion oaquestion, Model model,HttpServletRequest request) {
 		model.addAttribute("oaquestion", oaquestion);
+		model.addAttribute("myquestion", request.getParameter("myquestion"));
 		for(Oaanswer an : oaquestion.getOaanswerList()){
 			if(an.getCreateBy().getId().equals(oaquestion.getCreateBy().getId())){
 				oaquestion.setVar1(an.getAnswer());
@@ -116,12 +144,14 @@ public class OaquestionController extends BaseController {
 	 */
 	@RequiresPermissions(value={"oaqa:oaquestion:add","oaqa:oaquestion:edit"},logical=Logical.OR)
 	@RequestMapping(value = "save")
-	public String save(Oaquestion oaquestion, Model model, RedirectAttributes redirectAttributes) throws Exception{
+	public String save(Oaquestion oaquestion, Model model, RedirectAttributes redirectAttributes,HttpServletRequest request) throws Exception{
 		if (!beanValidator(model, oaquestion)){
-			return form(oaquestion, model);
+			return form(oaquestion, model,request);
 		}
 		if(!oaquestion.getIsNewRecord()){//编辑表单保存
 			Oaquestion t = oaquestionService.get(oaquestion.getId());//从数据库取出记录的值
+			String html=request.getParameter("html");
+			oaquestion.setQuestion(html);
 			MyBeanUtils.copyBeanNotNull2Bean(oaquestion, t);//将编辑表单中的非NULL值覆盖数据库记录中的值
 			oaquestionService.save(t);//保存
 		}else{//新增表单保存
@@ -132,10 +162,12 @@ public class OaquestionController extends BaseController {
 				oaanswerList.add(answer);
 				oaquestion.setOaanswerList(oaanswerList);
 			}
+			String html=request.getParameter("html");
+			oaquestion.setQuestion(html);
 			oaquestionService.save(oaquestion);//保存
 		}
 		addMessage(redirectAttributes, "保存信息成功");
-		return "redirect:"+Global.getAdminPath()+"/oaqa/oaquestion/?repage";
+		return "redirect:"+Global.getAdminPath()+"/oaqa/oaquestion/?repage&myquestion="+request.getParameter("myquestion");
 	}
 	
 	/**

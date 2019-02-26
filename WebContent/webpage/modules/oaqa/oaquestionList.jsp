@@ -4,6 +4,7 @@
 <head>
 	<title>信息管理</title>
 	<meta name="decorator" content="default"/>
+	<script src="${ctxStatic}/common/contabs.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 		    $("#search").click(function(){
@@ -16,26 +17,6 @@
 <body class="gray-bg">
 	<div class="wrapper wrapper-content">
 	<div class="ibox">
-	<%--<div class="ibox-title">
-		<h5>信息列表 </h5>
-		<div class="ibox-tools">
-			<a class="collapse-link">
-				<i class="fa fa-chevron-up"></i>
-			</a>
-			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-				<i class="fa fa-wrench"></i>
-			</a>
-			<ul class="dropdown-menu dropdown-user">
-				<li><a href="#">选项1</a>
-				</li>
-				<li><a href="#">选项2</a>
-				</li>
-			</ul>
-			<a class="close-link">
-				<i class="fa fa-times"></i>
-			</a>
-		</div>
-	</div>--%>
     
     <div class="ibox-content">
 	<sys:message content="${message}"/>
@@ -64,36 +45,6 @@
 			<p style="padding-top: 12px;">以下共搜索出${page.count}条相关<b class="text-success">${oaquestion.var1}</b>的<b class="text-info">等待回答的问题</b></p>
         </c:if>
 		<hr />
-
-	
-	<!-- 工具栏 -->
-	<%--<div class="row">
-	<div class="col-sm-12">
-		<div class="pull-left">
-			<shiro:hasPermission name="oaqa:oaquestion:add">
-				<table:addRow url="${ctx}/oaqa/oaquestion/form" title="信息"></table:addRow><!-- 增加按钮 -->
-			</shiro:hasPermission>
-			&lt;%&ndash;<shiro:hasPermission name="oaqa:oaquestion:edit">
-			    <table:editRow url="${ctx}/oaqa/oaquestion/form" title="信息" id="contentTable"></table:editRow><!-- 编辑按钮 -->
-			</shiro:hasPermission>
-			<shiro:hasPermission name="oaqa:oaquestion:del">
-				<table:delRow url="${ctx}/oaqa/oaquestion/deleteAll" id="contentTable"></table:delRow><!-- 删除按钮 -->
-			</shiro:hasPermission>
-			<shiro:hasPermission name="oaqa:oaquestion:import">
-				<table:importExcel url="${ctx}/oaqa/oaquestion/import"></table:importExcel><!-- 导入按钮 -->
-			</shiro:hasPermission>
-			<shiro:hasPermission name="oaqa:oaquestion:export">
-	       		<table:exportExcel url="${ctx}/oaqa/oaquestion/export"></table:exportExcel><!-- 导出按钮 -->
-	       	</shiro:hasPermission>&ndash;%&gt;
-	       &lt;%&ndash;<button class="btn btn-white btn-sm " data-toggle="tooltip" data-placement="left" onclick="sortOrRefresh()" title="刷新"><i class="glyphicon glyphicon-repeat"></i> 刷新</button>&ndash;%&gt;
-		
-			</div>
-		&lt;%&ndash;<div class="pull-right">
-			<button  class="btn btn-primary btn-rounded btn-outline btn-sm " onclick="search()" ><i class="fa fa-search"></i> 查询</button>
-			<button  class="btn btn-primary btn-rounded btn-outline btn-sm " onclick="reset()" ><i class="fa fa-refresh"></i> 重置</button>
-		</div>&ndash;%&gt;
-	</div>
-	</div>--%>
 	
 	<!-- 表格 -->
 		<div class="row">
@@ -101,35 +52,40 @@
 				<ul class="list-group">
 					<c:forEach items="${page.list}" var="oaquestion">
 						<li class="list-group-item">
-							<a class="rel <shiro:hasPermission name='oaqa:oaquestion:del'>qa_name</shiro:hasPermission>"><shiro:hasPermission name="oaqa:oaquestion:del"><b class="qa_del_btn1" onclick="delThis(this,0,'${oaquestion.id}')">&times;</b></shiro:hasPermission><h3>${oaquestion.question}</h3></a>
-
-							<c:forEach items="${oaquestion.oaanswerList}" var="answer" >
+							<div>
+								<div style="float:left;width:60px;padding:5px" >
+									<span title="回复"><h4>${fn:length(oaquestion.oaanswerList)}</h4></span>
+								</div>
+								<div style="float:left;padding:5px">
+									<a class="frameItem text-info" href="javascript:" vl="${ctx}/oaqa/oaquestion/detail?id=${oaquestion.id}" vl2="${oaquestion.title}" data-index="566">
+										<%--<c:if test="${oaquestion.createBy.id == loginUser.id}">
+											<b class="qa_del_btn1" onclick="delThis(this,0,'${oaquestion.id}')">&times;</b>
+										</c:if>--%>
+										<h3>${oaquestion.title}</h3>
+									</a>
+								</div>
+								<div style="float:right;padding:5px">
+									<div style="float:left">
+										<c:if test="${myquestion == 'yes'}">
+											<c:if test="${oaquestion.createBy.id == loginUser.id}">
+												<a href="#" onclick="openDialog('修改信息', '${ctx}/oaqa/oaquestion/form?id=${oaquestion.id}&myquestion=yes','800px', '500px')" class="btn btn-success btn-xs" ><i class="fa fa-edit"></i> 修改</a>
+											</c:if>
+										</c:if>
+									</div>
+									&nbsp;&nbsp;&nbsp;
+									<div style="float:right">
+										<span title="主题作者:${fns:getUserById(oaquestion.createBy.id).name}">主题作者:${fns:getUserById(oaquestion.createBy.id).name}</span>
+										<br/>
+										<fmt:formatDate value="${oaquestion.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+									</div>
+								</div>
+							</div>
+							<%--<c:forEach items="${oaquestion.oaanswerList}" var="answer" >
 								<p class="rel <shiro:hasPermission name='oaqa:oaquestion:del'>qa_name</shiro:hasPermission>"><shiro:hasPermission name="oaqa:oaquestion:del"><b class="qa_del_btn1" onclick="delThis(this,1,'${answer.id}')">&times;</b></shiro:hasPermission>${fns:getUserById(answer.createBy.id).name}&nbsp;回答：<span id="${answer.id}">${answer.answer}</span> <a class="zan rel" href="javascript:" vl="0" vl2="${answer.id}"><b class="glyphicon glyphicon-thumbs-up"></b><i></i>&nbsp;<span>${answer.praise}</span></a></p>
-							</c:forEach>
-							<c:if test="${fn:length(oaquestion.oaanswerList) == 0}"><h6>暂无答案</h6></c:if>
+							</c:forEach>--%>
 
 							<shiro:hasPermission name="oaqa:oaquestion:edit">
-								<%--<hr />--%>
 							<div class="row">
-								<div class="col-sm-1"><h4><a href="javascript:" vl="${oaquestion.id}" name="toAnswer" onclick="eidtAnswer(this)">我要回答</a></h4></div>
-								<div class="col-sm-11 form-inline" style="display: none">
-									<c:set var="exitId" value="0"></c:set>
-									<c:forEach items="${oaquestion.oaanswerList}" var="answer" >
-										<c:if test="${answer.createBy.id == loginUser.id}">
-											<input type="text" name="answercontent" value="${answer.answer}" class="form-control" style="width: 300px;" />
-											<input type="hidden" name="answerid" value="${answer.id}" />
-											<input type="hidden" name="questionid" value="${oaquestion.id}" />
-											<c:set var="exitId" value="1"></c:set>
-										</c:if>
-									</c:forEach>
-									<c:if test="${exitId == '0'}">
-										<input type="text" class="form-control" name="answercontent" style="width: 300px;" />
-										<input type="hidden" name="answerid" value="" />
-										<input type="hidden" name="questionid" value="${oaquestion.id}" />
-									</c:if>
-									<button type="button" class="btn btn-primary" onclick="submitAnswer(this)">提交</button>
-									<button type="button" class="btn btn-white" onclick="hide(this)">我再想想</button>
-								</div>
 							</div>
 							</shiro:hasPermission>
 
@@ -140,41 +96,7 @@
 				</ul>
 			</div>
 		</div>
-	<%--<table id="contentTable" class="table table-striped table-bordered table-hover table-condensed dataTables-example dataTable">
-		<thead>
-			<tr>
-				<th  class="">问</th>
-				<th>操作</th>
-			</tr>
-		</thead>
-		<tbody>
-		<c:forEach items="${list}" var="oaquestion">
-			<tr>
-				<td>
-					${oaquestion.question}<br/>
-					<c:forEach items="${oaquestion.oaanswerList}" var="answer" >
-						${fns:getUserById(answer.createBy.id).name}:${answer.answer}
-					</c:forEach>
-				</td>
-				<td>
-					&lt;%&ndash;<shiro:hasPermission name="oaqa:oaquestion:view">
-						<a href="#" onclick="openDialogView('查看信息', '${ctx}/oaqa/oaquestion/form?id=${oaquestion.id}','800px', '500px')" class="btn btn-info btn-xs" ><i class="fa fa-search-plus"></i> 查看</a>
-					</shiro:hasPermission>&ndash;%&gt;
-					&lt;%&ndash;<shiro:hasPermission name="oaqa:oaquestion:edit">
-    					<a href="#" onclick="openDialog('修改信息', '${ctx}/oaqa/oaquestion/form?id=${oaquestion.id}','800px', '500px')" class="btn btn-success btn-xs" ><i class="fa fa-edit"></i> 修改</a>
-    				</shiro:hasPermission>
-    				<shiro:hasPermission name="oaqa:oaquestion:del">
-						<a href="${ctx}/oaqa/oaquestion/delete?id=${oaquestion.id}" onclick="return confirmx('确认要删除该信息吗？', this.href)"   class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> 删除</a>
-					</shiro:hasPermission>&ndash;%&gt;
-					<c:if test="${loginUser.id == oaquestion.createBy.id}">
-						<a href="#" onclick="openDialog('修改信息', '${ctx}/oaqa/oaquestion/form?id=${oaquestion.id}','800px', '500px')" class="btn btn-success btn-xs" ><i class="fa fa-edit"></i> 修改</a>
-						<a href="${ctx}/oaqa/oaquestion/delete?id=${oaquestion.id}" onclick="return confirmx('确认要删除吗？', this.href)"   class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> 删除</a>
-					</c:if>
-				</td>
-			</tr>
-		</c:forEach>
-		</tbody>
-	</table>--%>
+
 		<shiro:hasPermission name="oaqa:oaquestion:del">
 			<input type="hidden" id="isHasDel" name="isHasDel" value="1" />
 		</shiro:hasPermission>
@@ -189,7 +111,7 @@
 
 <script>
     function add(){
-        openDialog("创建问答","${ctx}/oaqa/oaquestion/form","60%", "30%","");
+        openDialog("创建问答","${ctx}/oaqa/oaquestion/form?myquestion=yes","80%", "80%","");
     }
 
     function eidtAnswer(obj){
@@ -254,27 +176,18 @@
         $(obj).parent().hide();
     }
     function delThis(obj,type,id) {
-        $.post("${ctx}/oaqa/oaquestion/logicDelete",{'type':type,'pid':id},function(data){
-            var jsonData = jQuery.parseJSON(data);
-            if(jsonData.status == 'y'){
-                if(type==0){
-                    $(obj).closest("li").remove();
-                }else{
-                    var li = $(obj).closest("li");
-                    $(obj).closest("p").remove();
-                    if(li.find("p").length == 0){
-                        li.find("a.qa_name").after('<h6>暂无答案</h6>');
-                    }
-                }
-
-                li.find("input[name=answercontent]").val("");
-                li.find("input[name=answerid]").val("");
-
-            }else{
-                layer.alert(jsonData.info,{icon:2});
-            }
-        });
-
+        layer.confirm('您确认要删除？', {
+                btn: ['确认','关闭'] //按钮
+            },function(){
+				$.post("${ctx}/oaqa/oaquestion/logicDelete",{'type':type,'pid':id},function(data){
+					var jsonData = jQuery.parseJSON(data);
+					if(jsonData.status == 'y'){
+                        location.reload();
+					}else{
+						layer.alert(jsonData.info,{icon:2});
+					}
+				});
+        	});
 
     }
 

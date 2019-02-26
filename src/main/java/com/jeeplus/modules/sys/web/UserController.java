@@ -567,6 +567,37 @@ public class UserController extends BaseController {
 		out.close();
 	}
 
+	//editor.md本地图片上传
+	@RequiresPermissions("user")
+	@RequestMapping(value = "mdImageUpload")
+	public void mdImageUpload( HttpServletRequest request, HttpServletResponse response,@RequestParam(value = "editormd-image-file", required = false) MultipartFile file) throws IllegalStateException, IOException {
+		response.setHeader("Content-Type", "text/html;charset=utf-8");
+		PrintWriter out =  response.getWriter();
+		Map map = new HashMap();
+		// 判断文件是否为空
+		if (!file.isEmpty()) {
+			try {
+				// 文件保存路径
+				String realPath = Global.USERFILES_BASE_URL
+						+ UserUtils.getPrincipal() + "/images/";
+				// 转存文件
+				FileUtils.createDirectory(Global.getUserfilesBaseDir() + realPath);
+				file.transferTo(new File(Global.getUserfilesBaseDir() + realPath + file.getOriginalFilename()));
+				map.put("url", realPath + file.getOriginalFilename());
+
+				//下面response返回的json格式是editor.md所限制的，规范输出就OK
+				out.write("{\"success\": 1, \"message\":\"上传成功\",\"url\":\"" + realPath + file.getOriginalFilename() + "\"}");
+			}
+			catch (Exception e) {
+				try {
+					response.getWriter().write( "{\"success\":0}" );
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+	}
+
 	/**
 	 * 返回用户信息
 	 * @return
