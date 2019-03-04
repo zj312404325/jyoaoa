@@ -78,6 +78,7 @@ public class OaquestionController extends BaseController {
 	public String searchIndex(Oaquestion oaquestion, Model model) {
 		return "modules/oaqa/oaquestionSearch";
 	}
+
 	/**
 	 * 信息列表页面
 	 */
@@ -152,6 +153,8 @@ public class OaquestionController extends BaseController {
 			Oaquestion t = oaquestionService.get(oaquestion.getId());//从数据库取出记录的值
 			String html=request.getParameter("html");
 			oaquestion.setQuestion(html);
+			String markdown=request.getParameter("markdownText");
+			oaquestion.setRemarks(markdown);
 			MyBeanUtils.copyBeanNotNull2Bean(oaquestion, t);//将编辑表单中的非NULL值覆盖数据库记录中的值
 			oaquestionService.save(t);//保存
 		}else{//新增表单保存
@@ -164,6 +167,8 @@ public class OaquestionController extends BaseController {
 			}
 			String html=request.getParameter("html");
 			oaquestion.setQuestion(html);
+			String markdown=request.getParameter("markdownText");
+			oaquestion.setRemarks(markdown);
 			oaquestionService.save(oaquestion);//保存
 		}
 		addMessage(redirectAttributes, "保存信息成功");
@@ -173,7 +178,7 @@ public class OaquestionController extends BaseController {
 	/**
 	 * 删除信息
 	 */
-//	@RequiresPermissions("oaqa:oaquestion:del")
+	@RequiresPermissions("oaqa:oaquestion:del")
 	@RequestMapping(value = "delete")
 	public String delete(Oaquestion oaquestion, RedirectAttributes redirectAttributes) {
 		oaquestionService.delete(oaquestion);

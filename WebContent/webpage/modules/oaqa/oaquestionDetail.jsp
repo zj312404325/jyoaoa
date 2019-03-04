@@ -303,7 +303,7 @@
 								</div>
 								<div class="media-body" style="">
 									<h4 class="media-heading">${fns:getUserById(answer.createBy.id).name}</h4>
-									<div style="min-height: 100px;">${answer.answer}</div>
+									<div style="min-height: 60px;">${answer.answer}</div>
 									<ul class="list-inline">
 										<li><a class="zan rel" href="javascript:" vl="0" vl2="${answer.id}"><b class="glyphicon glyphicon-thumbs-up"></b><i></i>&nbsp;<span>${answer.praise}</span></a></li>
 									</ul>

@@ -31,18 +31,19 @@
 			</div>
 
             <input id="hasanswer" name="hasanswer" type="hidden" value="${oaquestion.hasanswer}"/>
+			<input id="myquestion" name="myquestion" type="hidden" value="${oaquestion.myquestion}"/>
 			<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 			<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 			<table:sortColumn id="orderBy" name="orderBy" value="${page.orderBy}" callback="sortOrRefresh();"/>
 		</form:form>
         <c:if test="${oaquestion.hasanswer == null || oaquestion.hasanswer == ''}">
-		<p style="padding-top: 12px;">以下共搜索出${page.count}条相关<b class="text-success">${oaquestion.var1}</b>的问答</p>
+		<p style="padding-top: 12px;">以下共搜索出${page.count}条相关<b class="text-success">${oaquestion.var1}</b>的分享</p>
         </c:if>
         <c:if test="${oaquestion.hasanswer == 'yes'}">
-			<p style="padding-top: 12px;">以下共搜索出${page.count}条相关<b class="text-success">${oaquestion.var1}</b>的<b class="text-info">已有答案的问题</b></p>
+			<p style="padding-top: 12px;">以下共搜索出${page.count}条相关<b class="text-success">${oaquestion.var1}</b>的<b class="text-info">已有回复的分享</b></p>
         </c:if>
         <c:if test="${oaquestion.hasanswer == 'no'}">
-			<p style="padding-top: 12px;">以下共搜索出${page.count}条相关<b class="text-success">${oaquestion.var1}</b>的<b class="text-info">等待回答的问题</b></p>
+			<p style="padding-top: 12px;">以下共搜索出${page.count}条相关<b class="text-success">${oaquestion.var1}</b>的<b class="text-info">等待回复的分享</b></p>
         </c:if>
 		<hr />
 	
@@ -71,6 +72,11 @@
 												<a href="#" onclick="openDialog('修改信息', '${ctx}/oaqa/oaquestion/form?id=${oaquestion.id}&myquestion=yes','800px', '500px')" class="btn btn-success btn-xs" ><i class="fa fa-edit"></i> 修改</a>
 											</c:if>
 										</c:if>
+										<c:if test="${myquestion != 'yes'}">
+											<shiro:hasPermission name="oaqa:oaquestion:edit">
+												<a href="#" onclick="openDialog('修改信息', '${ctx}/oaqa/oaquestion/form?id=${oaquestion.id}','800px', '500px')" class="btn btn-success btn-xs" ><i class="fa fa-edit"></i> 修改</a>
+											</shiro:hasPermission>
+										</c:if>
 									</div>
 									&nbsp;&nbsp;&nbsp;
 									<div style="float:right">
@@ -84,7 +90,7 @@
 								<p class="rel <shiro:hasPermission name='oaqa:oaquestion:del'>qa_name</shiro:hasPermission>"><shiro:hasPermission name="oaqa:oaquestion:del"><b class="qa_del_btn1" onclick="delThis(this,1,'${answer.id}')">&times;</b></shiro:hasPermission>${fns:getUserById(answer.createBy.id).name}&nbsp;回答：<span id="${answer.id}">${answer.answer}</span> <a class="zan rel" href="javascript:" vl="0" vl2="${answer.id}"><b class="glyphicon glyphicon-thumbs-up"></b><i></i>&nbsp;<span>${answer.praise}</span></a></p>
 							</c:forEach>--%>
 
-							<shiro:hasPermission name="oaqa:oaquestion:edit">
+							<shiro:hasPermission name="oaqa:oaquestion:list">
 							<div class="row">
 							</div>
 							</shiro:hasPermission>

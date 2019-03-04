@@ -15,7 +15,6 @@
 	<script type="text/javascript">
 		var validateForm;
 		var testEditor;
-		var wordsView;
 		//editor.md上传本地图片
         $(function() {
             testEditor=editormd("test-editormd", {
@@ -30,6 +29,7 @@
 				imageUploadURL : "${ctx}/sys/user/mdImageUpload",
 				saveHTMLToTextarea : true
         	})
+
         });
 
 		function doSubmit(){//回调函数，在编辑和保存动作时，供openDialog调用提交表单。
@@ -41,6 +41,8 @@
                 layer.alert("请输入内容",{icon:0});
                 return false;
             }
+            $("#markdownText").val(testEditor.getMarkdown());
+
 		  if(validateForm.form()){
 			  $("#inputForm").submit();
 			  return true;
@@ -132,9 +134,10 @@
 				</c:if>--%>
 
 				<div class="editormd" id="test-editormd">
-					<textarea class="editormd-markdown-textarea" name="test-editormd-markdown-doc" style="display: none;" id="editormd">${oaquestion.question}</textarea>
+					<textarea class="editormd-markdown-textarea" name="test-editormd-markdown-doc" style="display: none;" id="editormd">${oaquestion.remarks}</textarea>
 
 					<textarea class="editormd-html-textarea" name="html" id="html"></textarea>
+					<textarea class="editormd-html-textarea" name="markdownText" id="markdownText"></textarea>
 				</div>
 		 	</tbody>
 		</table>
