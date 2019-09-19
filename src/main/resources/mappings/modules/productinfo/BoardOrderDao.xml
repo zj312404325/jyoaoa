@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.productinfo.dao.BoardOrderDao">
+    
+	<sql id="boardOrderColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.orderno AS "orderno",
+		a.expect_date AS "expectDate",
+		a.real_date AS "realDate",
+		a.quantity AS "quantity",
+		a.remarks AS "remarks",
+		a.firmware AS "firmware",
+		a.product_name AS "productName",
+		a.bom AS "bom",
+		a.pcb AS "pcb"
+	</sql>
+
+	
+    
+	<select id="get" resultType="BoardOrder" >
+		SELECT 
+			<include refid="boardOrderColumns"/>
+		FROM board_order a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="BoardOrder" >
+		SELECT 
+			<include refid="boardOrderColumns"/>
+		FROM board_order a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} 
+			<if test="createBy != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="startdate != null and startdate != ''">
+				AND <![CDATA[to_char(a.create_date,'yyyy-mm-dd')>=to_char(#{startdate},'yyyy-mm-dd') ]]>   
+			</if>
+			<if test="enddate != null and enddate != ''">
+				AND <![CDATA[to_char(a.create_date,'yyyy-mm-dd')<=to_char(#{enddate},'yyyy-mm-dd') ]]>
+			</if>
+			<if test="firmware != null and firmware != ''">
+				AND a.firmware LIKE
+				<if test="dbName == 'oracle'">'%'||#{firmware}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{firmware}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{firmware},'%')</if>
+			</if>
+			<if test="productName != null and productName != ''">
+				AND a.product_name LIKE
+				<if test="dbName == 'oracle'">'%'||#{productName}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{productName}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{productName},'%')</if>
+			</if>
+			<if test="bom != null and bom != ''">
+				AND a.bom LIKE
+				<if test="dbName == 'oracle'">'%'||#{bom}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{bom}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{bom},'%')</if>
+			</if>
+			<if test="pcb != null and pcb != ''">
+				AND a.pcb LIKE
+				<if test="dbName == 'oracle'">'%'||#{pcb}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{pcb}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{pcb},'%')</if>
+			</if>
+			<if test="sqlstr != null">
+				AND (${sqlstr})
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="BoardOrder" >
+		SELECT 
+			<include refid="boardOrderColumns"/>
+		FROM board_order a
+
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO board_order(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			orderno,
+			expect_date,
+			real_date,
+			quantity,
+			remarks,
+			firmware,
+			product_name,
+			bom,
+			pcb
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{orderNo},
+			#{expectDate},
+			#{realDate},
+			#{quantity},
+			#{remarks},
+			#{firmware},
+			#{productName},
+			#{bom},
+			#{pcb}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE board_order SET
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			orderno = #{orderNo},
+			expect_date = #{expectDate},
+			real_date = #{realDate},
+			quantity = #{quantity},
+			remarks = #{remarks},
+			firmware = #{firmware},
+			product_name = #{productName},
+			bom = #{bom},
+			pcb = #{pcb}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM board_order
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE board_order SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BoardOrder" statementType="STATEMENT">
+		select * FROM board_order  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.productinfo.dao.MachineOrderDetailDao">
+    
+	<sql id="machineOrderDetailColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.machine_orderid AS "machineorderid",
+		a.board_record AS "boardRecord",
+		a.machine_record AS "machine_record",
+		a.code1 AS "code1",
+		a.code2 AS "code2",
+		a.code3 AS "code3",
+		a.code4 AS "code4",
+		a.code5 AS "code5",
+		a.code6 AS "code6",
+		a.code7 AS "code7",
+		a.code8 AS "code8",
+		a.code9 AS "code9",
+		a.code10 AS "code10"
+	</sql>
+	
+	<sql id="machineOrderDetailJoins">
+		LEFT JOIN machine_order b ON b.id = a.machine_orderid
+	</sql>
+    
+	<select id="get" resultType="MachineOrderDetail" >
+		SELECT 
+			<include refid="machineOrderDetailColumns"/>
+		FROM machine_orderdtl a
+		<include refid="machineOrderDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="MachineOrderDetail" >
+		SELECT 
+			<include refid="machineOrderDetailColumns"/>
+		FROM machine_orderdtl a
+		<include refid="machineOrderDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="machineOrder != null and machineOrder != ''">
+				AND a.machine_orderid = #{machineOrder.id}
+			</if>
+		</where>
+		<choose>
+			<when test="machineOrder.page !=null and machineOrder.page.orderBy != null and machineOrder.page.orderBy != ''">
+				ORDER BY ${machineOrder.page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="MachineOrderDetail" >
+		SELECT 
+			<include refid="machineOrderDetailColumns"/>
+		FROM machine_orderdtl a
+		<include refid="machineOrderDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO machine_orderdtl(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			machine_orderid,
+			board_record,
+			machine_record,
+			code1,
+			code2,
+			code3,
+			code4,
+			code5,
+			code6,
+			code7,
+			code8,
+			code9,
+			code10
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{machineOrder.id},
+			#{boardRecord},
+			#{machineRecord},
+			#{code1},
+			#{code2},
+			#{code3},
+			#{code4},
+			#{code5},
+			#{code6},
+			#{code7},
+			#{code8},
+			#{code9},
+			#{code10}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE machine_orderdtl SET
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			machine_orderid = #{machineOrder.id},
+			board_record = #{boardRecord},
+			machine_record = #{machineRecord},
+			code1 = #{code1},
+			code2 = #{code2},
+			code3 = #{code3},
+			code4 = #{code4},
+			code5 = #{code5},
+			code6 = #{code6},
+			code7 = #{code7},
+			code8 = #{code8},
+			code9 = #{code9},
+			code10 = #{code10},
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM machine_orderdtl
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE machine_orderid = #{machineOrder.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE machine_orderdtl SET
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE machine_orderid = #{machineOrder.id}
+			</otherwise>
+		</choose>
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="MachineOrderDetail" statementType="STATEMENT">
+		select * FROM machine_orderdtl  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

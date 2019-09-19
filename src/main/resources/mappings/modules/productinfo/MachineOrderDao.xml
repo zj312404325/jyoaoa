@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.productinfo.dao.MachineOrderDao">
+    
+	<sql id="machineOrderColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.orderno AS "orderno",
+		a.expect_date AS "expectDate",
+		a.real_date AS "realDate",
+		a.quantity AS "quantity",
+		a.firmware AS "firmware",
+		a.product_name AS "productName",
+		a.hardware AS "hardware",
+		a.kernel AS "kernel",
+		a.ram AS "ram",
+		a.ec AS "ec",
+		a.os AS "os",
+		a.gpu AS "gpu",
+		a.expand1 AS "expand1",
+		a.expand2 AS "expand2"
+	</sql>
+
+	
+    
+	<select id="get" resultType="MachineOrder" >
+		SELECT 
+			<include refid="machineOrderColumns"/>
+		FROM machine_order a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="MachineOrder" >
+		SELECT 
+			<include refid="machineOrderColumns"/>
+		FROM machine_order a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} 
+			<if test="createBy != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="startdate != null and startdate != ''">
+				AND <![CDATA[to_char(a.create_date,'yyyy-mm-dd')>=to_char(#{startdate},'yyyy-mm-dd') ]]>   
+			</if>
+			<if test="enddate != null and enddate != ''">
+				AND <![CDATA[to_char(a.create_date,'yyyy-mm-dd')<=to_char(#{enddate},'yyyy-mm-dd') ]]>
+			</if>
+			<if test="firmware != null and firmware != ''">
+				AND a.firmware LIKE
+				<if test="dbName == 'oracle'">'%'||#{firmware}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{firmware}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{firmware},'%')</if>
+			</if>
+			<if test="productName != null and productName != ''">
+				AND a.product_name LIKE
+				<if test="dbName == 'oracle'">'%'||#{productName}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{productName}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{productName},'%')</if>
+			</if>
+			<if test="kernel != null and kernel != ''">
+				AND a.kernel LIKE
+				<if test="dbName == 'oracle'">'%'||#{kernel}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{kernel}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{kernel},'%')</if>
+			</if>
+			<if test="os != null and os != ''">
+				AND a.os LIKE
+				<if test="dbName == 'oracle'">'%'||#{os}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{os}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{os},'%')</if>
+			</if>
+			<if test="sqlstr != null">
+				AND (${sqlstr})
+			</if>
+			<if test="sqlstr != null">
+				AND (${sqlstr})
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="MachineOrder" >
+		SELECT 
+			<include refid="machineOrderColumns"/>
+		FROM machine_order a
+
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO machine_order(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			orderno,
+			expect_date,
+			real_date,
+			quantity,
+			firmware,
+			product_name,
+			ec,
+			hardware,
+			kernel,
+			ram,
+			os,
+			gpu,
+			expand1,
+			expand2
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{orderNo},
+			#{expectDate},
+			#{realDate},
+			#{quantity},
+			#{firmware},
+			#{productName},
+			#{ec},
+			#{hardware},
+			#{kernel},
+			#{ram},
+			#{os},
+			#{gpu},
+			#{expand1},
+			#{expand2}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE machine_order SET
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			orderno = #{orderNo},
+			expect_date = #{expectDate},
+			real_date = #{realDate},
+			quantity = #{quantity},
+			firmware = #{firmware},
+			product_name = #{productName},
+			ec = #{ec},
+			hardware = #{hardware},
+			kernel = #{kernel},
+			ram = #{ram},
+			os = #{os},
+			gpu = #{gpu},
+			expand1 = #{expand1},
+			expand2 = #{expand2}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM machine_order
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE machine_order SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="MachineOrder" statementType="STATEMENT">
+		select * FROM machine_order  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

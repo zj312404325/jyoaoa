@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.productinfo.dao.BoardOrderDetailDao">
+
+	<sql id="boardOrderDetailColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.remarks AS "remarks",
+		a.board_orderid AS "boardorderid",
+		a.board_record AS "boardRecord",
+		a.lable1 AS "lable1",
+		a.lable2 AS "lable2",
+		a.lable3 AS "lable3",
+		a.lable4 AS "lable4",
+		a.lable5 AS "lable5",
+		a.lable6 AS "lable6"
+	</sql>
+
+	<sql id="boardOrderDetailJoins">
+		LEFT JOIN board_order b ON b.id = a.board_orderid
+	</sql>
+
+   <select id="get" resultType="BoardOrderDetail" >
+		SELECT
+			<include refid="boardOrderDetailColumns"/>
+		FROM board_orderdtl a
+		<include refid="boardOrderDetailJoins"/>
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="findList" resultType="BoardOrderDetail" >
+		SELECT
+			<include refid="boardOrderDetailColumns"/>
+		FROM board_orderdtl a
+		<include refid="boardOrderDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="boardOrder != null and boardOrder != ''">
+				AND a.board_orderid = #{boardOrder.id}
+			</if>
+		</where>
+		<choose>
+			<when test="boardOrder.page !=null and boardOrder.page.orderBy != null and boardOrder.page.orderBy != ''">
+				ORDER BY ${boardOrder.page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="BoardOrderDetail" >
+		SELECT
+			<include refid="boardOrderDetailColumns"/>
+		FROM board_orderdtl a
+		<include refid="boardOrderDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+
+	<insert id="insert">
+		INSERT INTO board_orderdtl(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			board_orderid,
+			board_record,
+			lable1,
+			lable2,
+			lable3,
+			lable4,
+			lable5,
+			lable6
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{boardOrder.id},
+			#{boardRecord},
+			#{lable1},
+			#{lable2},
+			#{lable3},
+			#{lable4},
+			#{lable5},
+			#{lable6}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE board_orderdtl SET
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			board_orderid = #{boardOrder.id},
+			board_record = #{boardRecord},
+			lable1 = #{lable1},
+			lable2 = #{lable2},
+			lable3 = #{lable3},
+			lable4 = #{lable4},
+			lable5 = #{lable5},
+			lable6 = #{lable6}
+		WHERE id = #{id}
+	</update>
+
+
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM board_orderdtl
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE board_orderid = #{boardOrder.id}
+			</otherwise>
+		</choose>
+	</update>
+
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE board_orderdtl SET
+			del_flag = #{DEL_FLAG_DELETE}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE board_orderid = #{boardOrder.id}
+			</otherwise>
+		</choose>
+	</update>
+
+
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="BoardOrderDetail" statementType="STATEMENT">
+		select * FROM board_orderdtl  where ${propertyName} = '${value}'
+	</select>
+
+</mapper>

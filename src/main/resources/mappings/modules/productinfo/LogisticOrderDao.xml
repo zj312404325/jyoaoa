@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.productinfo.dao.LogisticOrderDao">
+    
+	<sql id="logisticOrderColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.orderno AS "orderno",
+		a.quantity AS "quantity",
+		a.receive_comp AS "receiveComp",
+		a.receive_address AS "receiveAddress",
+		a.receive_mobile AS "receiveMobile",
+		a.receive_person AS "receivePerson",
+		a.send_comp AS "sendComp",
+		a.send_address AS "sendAddress",
+		a.send_mobile AS "sendMobile",
+		a.send_person AS "sendPerson",
+		a.trans_comp AS "transComp",
+		a.trans_mobile AS "transMobile",
+		a.trans_person AS "transPerson"
+	</sql>
+
+	
+    
+	<select id="get" resultType="LogisticOrder" >
+		SELECT 
+			<include refid="logisticOrderColumns"/>
+		FROM logistic_order a
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="LogisticOrder" >
+		SELECT 
+			<include refid="logisticOrderColumns"/>
+		FROM logistic_order a
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL} 
+			<if test="createBy != null and createBy.id != ''">
+				AND a.create_by = #{createBy.id}
+			</if>
+			<if test="startdate != null and startdate != ''">
+				AND <![CDATA[to_char(a.create_date,'yyyy-mm-dd')>=to_char(#{startdate},'yyyy-mm-dd') ]]>   
+			</if>
+			<if test="enddate != null and enddate != ''">
+				AND <![CDATA[to_char(a.create_date,'yyyy-mm-dd')<=to_char(#{enddate},'yyyy-mm-dd') ]]>
+			</if>
+			<if test="receiveComp != null and receiveComp != ''">
+				AND a.receive_comp LIKE
+				<if test="dbName == 'oracle'">'%'||#{receiveComp}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{receiveComp}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{receiveComp},'%')</if>
+			</if>
+			<if test="sqlstr != null">
+				AND (${sqlstr})
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="LogisticOrder" >
+		SELECT 
+			<include refid="logisticOrderColumns"/>
+		FROM logistic_order a
+
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO logistic_order(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			orderno,
+			quantity,
+			receive_comp,
+			receive_address,
+			receive_mobile,
+			receive_person,
+			send_comp,
+			send_address,
+			send_mobile,
+			send_person,
+			trans_comp,
+			trans_mobile,
+			trans_person
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{orderNo},
+			#{quantity},
+			#{receiveComp},
+			#{receiveAddress},
+			#{receiveMobile},
+			#{receivePerson},
+			#{sendComp},
+			#{sendAddress},
+			#{sendMobile},
+			#{sendPerson},
+			#{transComp},
+			#{transMobile},
+			#{transPerson}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE logistic_order SET
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			orderno = #{orderNo},
+			quantity = #{quantity},
+			receive_comp = #{receiveComp},
+			receive_address = #{receiveAddress},
+			receive_mobile = #{receiveMobile},
+			receive_person = #{receivePerson},
+			send_comp = #{sendComp},
+			send_address = #{sendAddress},
+			send_mobile = #{sendMobile},
+			send_person = #{sendPerson},
+			trans_comp = #{transComp},
+			trans_mobile = #{transMobile},
+			trans_person = #{transPerson}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM logistic_order
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE logistic_order SET
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="LogisticOrder" statementType="STATEMENT">
+		select * FROM logistic_order  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>
