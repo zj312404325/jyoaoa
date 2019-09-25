@@ -50,6 +50,9 @@ public class LogisticOrder extends DataEntity<LogisticOrder> {
 
     private String sqlstr;
 
+    /**sn编号*/
+    private String codeNo;
+
     public LogisticOrder() {
         super();
     }
@@ -192,5 +195,13 @@ public class LogisticOrder extends DataEntity<LogisticOrder> {
 
     public void setSqlstr(String sqlstr) {
         this.sqlstr = sqlstr;
+    }
+
+    public String getCodeNo() {
+        return codeNo;
+    }
+
+    public void setCodeNo(String codeNo) {
+        this.codeNo = codeNo;
     }
 }

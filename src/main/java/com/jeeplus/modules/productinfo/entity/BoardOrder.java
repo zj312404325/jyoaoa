@@ -41,6 +41,8 @@ public class BoardOrder extends DataEntity<BoardOrder> {
     private Date enddate;
 
     private String sqlstr;
+    /**sn编号*/
+    private String codeNo;
 
     public BoardOrder() {
         super();
@@ -144,5 +146,13 @@ public class BoardOrder extends DataEntity<BoardOrder> {
 
     public void setSqlstr(String sqlstr) {
         this.sqlstr = sqlstr;
+    }
+
+    public String getCodeNo() {
+        return codeNo;
+    }
+
+    public void setCodeNo(String codeNo) {
+        this.codeNo = codeNo;
     }
 }

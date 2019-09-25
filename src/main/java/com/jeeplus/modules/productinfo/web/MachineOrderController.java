@@ -5,9 +5,9 @@ import com.jeeplus.common.persistence.Page;
 import com.jeeplus.common.utils.FormatUtil;
 import com.jeeplus.common.utils.MyBeanUtils;
 import com.jeeplus.common.utils.StringUtils;
+import com.jeeplus.common.utils.excel.ImportExcel;
 import com.jeeplus.common.web.BaseController;
-import com.jeeplus.modules.productinfo.entity.BoardOrder;
-import com.jeeplus.modules.productinfo.entity.MachineOrder;
+import com.jeeplus.modules.productinfo.entity.*;
 import com.jeeplus.modules.productinfo.service.BoardOrderService;
 import com.jeeplus.modules.productinfo.service.MachineOrderService;
 import com.jeeplus.modules.sys.entity.User;
@@ -19,11 +19,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
+import java.util.List;
 
 /**
  * 整机Controller
@@ -81,6 +85,26 @@ public class MachineOrderController extends BaseController {
     }
 
     /**
+     * 整机信息列表页面
+     */
+    @RequiresPermissions("checkmodel:machineOrder:list")
+    @RequestMapping(value = {"codeNoList", ""})
+    public String codeNoList(MachineOrder machineOrder, HttpServletRequest request, HttpServletResponse response, Model model) {
+        User user= UserUtils.getUser();
+        String codeNo=request.getParameter("codeNo");
+        if(FormatUtil.isNoEmpty(codeNo)){
+            model.addAttribute("isSearch","0");
+        }
+        else{
+            model.addAttribute("isSearch","1");
+        }
+        model.addAttribute("machineOrder",machineOrder);
+        Page<MachineOrder> page = machineOrderService.findDetailPage(new Page<MachineOrder>(request, response), machineOrder);
+        model.addAttribute("page", page);
+        return "modules/productinfo/machineOrderList";
+    }
+
+    /**
      * 查看，增加，编辑主板整机页面
      */
     @RequiresPermissions(value={"checkmodel:machineOrder:view","checkmodel:machineOrder:add","checkmodel:machineOrder:edit"},logical=Logical.OR)
@@ -119,6 +143,11 @@ public class MachineOrderController extends BaseController {
 
             //将编辑表单中的非NULL值覆盖数据库记录中的值
             MyBeanUtils.copyBeanNotNull2Bean(machineOrder, t);
+            //明细数量必须小于等于主表生产数量
+            if(t.getMachineOrderDetailList().size()>t.getQuantity()){
+                addMessage(redirectAttributes, "明细数量不能大于生产数量，保存整机明细失败");
+                return "redirect:"+Global.getAdminPath()+"/checkmodel/productinfo/machineOrder/machineOrderIndex?repage=repage&type="+request.getParameter("type");
+            }
             //保存
             machineOrderService.save(t);
 
@@ -126,12 +155,70 @@ public class MachineOrderController extends BaseController {
             return "redirect:"+Global.getAdminPath()+"/checkmodel/productinfo/machineOrder/machineOrderIndex?repage=repage&type="+request.getParameter("type");
         }else{
             //新增表单保存
-
+            //明细数量必须小于等于主表生产数量
+            if(machineOrder.getMachineOrderDetailList().size()>machineOrder.getQuantity()){
+                addMessage(redirectAttributes, "明细数量不能大于生产数量，保存整机明细失败");
+                return "redirect:"+Global.getAdminPath()+"/checkmodel/productinfo/machineOrder/machineOrderIndex?repage=repage&type="+request.getParameter("type");
+            }
             //保存
             machineOrderService.save(machineOrder);
             addMessage(redirectAttributes, "保存整机明细成功");
             //跳转到周报列表
             return "redirect:"+Global.getAdminPath()+"/checkmodel/productinfo/machineOrder/machineOrderIndex?repage=repage&type="+request.getParameter("type");
         }
+    }
+
+    /**
+     * 导入Excel数据
+     */
+    @RequiresPermissions("checkmodel:machineOrder:import")
+    @RequestMapping(value = "import", method=RequestMethod.POST)
+    public String importFile(MachineOrder machineOrder, MultipartFile file, RedirectAttributes redirectAttributes) {
+        try {
+            int i=1;
+            int successNum = 0;
+            int failureNum = 0;
+            StringBuilder failureMsg = new StringBuilder();
+            ImportExcel ei = new ImportExcel(file, 1, 0);
+            List<MachineOrderDetail> list = ei.getDataList(MachineOrderDetail.class);
+            //明细数量必须小于等于主表生产数量
+            if(list.size()>machineOrder.getQuantity()){
+                addMessage(redirectAttributes, "导入整机明细信息记录失败！失败信息：导入明细数量不能大于生产数量！");
+                return "redirect:"+Global.getAdminPath()+"/checkmodel/productinfo/machineOrder/machineOrderIndex?repage=repage&type=0";
+            }
+
+            for (MachineOrderDetail machineOrderDetail : list){
+                try{
+                    machineOrderDetail.setMachineOrder(machineOrder);
+                    machineOrderDetail.setCreateBy(UserUtils.getUser());
+                    machineOrderDetail.setSort(i);
+                    machineOrderService.save(machineOrderDetail);
+                    successNum++;
+                    i++;
+                }catch(ConstraintViolationException ex){
+                    failureNum++;
+                }catch (Exception ex) {
+                    failureNum++;
+                }
+            }
+            if (failureNum>0){
+                failureMsg.insert(0, "，失败 "+failureNum+" 条整机明细信息记录。");
+            }
+            addMessage(redirectAttributes, "已成功导入 "+successNum+" 条整机明细信息记录"+failureMsg);
+        } catch (Exception e) {
+            addMessage(redirectAttributes, "导入整机明细信息记录失败！失败信息："+e.getMessage());
+        }
+        return "redirect:"+Global.getAdminPath()+"/checkmodel/productinfo/machineOrder/machineOrderIndex?repage=repage&type=0";
+    }
+
+    /**
+     * 删除
+     */
+    @RequiresPermissions("checkmodel:machineOrder:del")
+    @RequestMapping(value = "delete")
+    public String delete(MachineOrder machineOrder, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+        machineOrderService.delete(machineOrder);
+        addMessage(redirectAttributes, "删除整机信息成功");
+        return "redirect:"+Global.getAdminPath()+"/checkmodel/productinfo/machineOrder/machineOrderIndex?repage=repage&type="+request.getParameter("type");
     }
 }

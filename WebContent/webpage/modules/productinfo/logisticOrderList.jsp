@@ -29,7 +29,7 @@
 	<div class="">
 	<sys:message content="${message}"/>
 	<div class="row">
-		<div class="col-sm-12">
+		<div class="col-sm-12" <c:if test="${isSearch!=null&&isSearch=='0' }">hidden</c:if>>
 	<!--查询条件-->
 	<form:form id="searchForm" modelAttribute="logisticOrder" action="${ctx}/checkmodel/productinfo/logisticOrder/list?cat=depart" method="post" class="form-inline">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -58,8 +58,10 @@
 	<div class="row">
 	<div class="col-sm-12">
 		<div class="pull-left">
-			<div class="pull-left">
-				<table:addRowJump url="${ctx}/checkmodel/productinfo/logisticOrder/form?type=0&opt=add" width="80%" title="主板信息"></table:addRowJump><!-- 增加按钮 -->
+			<div class="pull-left" <c:if test="${isSearch!=null&&isSearch=='0' }">hidden</c:if>>
+				<shiro:hasPermission name="checkmodel:logisticOrder:add">
+					<table:addRowJump url="${ctx}/checkmodel/productinfo/logisticOrder/form?type=0&opt=add" width="80%" title="主板信息"></table:addRowJump><!-- 增加按钮 -->
+				</shiro:hasPermission>
 				<button class="btn btn-white btn-sm " data-toggle="tooltip" data-placement="left" onclick="sortOrRefresh()" title="刷新"><i class="glyphicon glyphicon-repeat"></i> 刷新</button>
 			</div>
 
@@ -88,7 +90,7 @@
 				<th class="sort-column transComp">承运单位</th>
 				<th class="sort-column transMobile">承运电话</th>
 				<th class="sort-column transPerson">承运人</th>
-
+				<th class="sort-column a.create_date">创建日期</th>
 				<th>操作</th>
 			</tr>
 		</thead>
@@ -139,11 +141,19 @@
 				<td>
 					${logisticOrder.transPerson}
 				</td>
-
+				<td>
+					<fmt:formatDate value="${logisticOrder.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+				</td>
 
 				<td>
 					<shiro:hasPermission name="checkmodel:logisticOrder:view">
 						<a href="#" onclick="openDialogView('查看发货明细', '${ctx}/checkmodel/productinfo/logisticOrder/form?id=${logisticOrder.id}&type=1&bhv=1','1200px', '500px')" class="btn btn-info btn-xs" ><i class="fa fa-search-plus"></i> 查看</a>
+					</shiro:hasPermission>
+					<shiro:hasPermission name="checkmodel:machineOrder:edit">
+						<a href="#" onclick="openDialog('修改发货明细', '${ctx}/checkmodel/productinfo/logisticOrder/form?id=${logisticOrder.id}&type=0','1200px', '500px')" class="btn btn-success btn-xs" ><i class="fa fa-edit"></i> 修改</a>
+					</shiro:hasPermission>
+					<shiro:hasPermission name="checkmodel:machineOrder:del">
+						<a href="${ctx}/checkmodel/productinfo/logisticOrder/delete?id=${logisticOrder.id}&type=0" onclick="return confirmxParent('确认要删除该发货信息吗？', this.href)"   class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> 删除</a>
 					</shiro:hasPermission>
 				</td>
 			</tr>

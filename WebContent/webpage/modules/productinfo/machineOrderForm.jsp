@@ -43,6 +43,15 @@
         }
 
 		$(document).ready(function() {
+            laydate({
+                elem: '#expectDate', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+                event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+            });
+            laydate({
+                elem: '#realDate', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+                event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+            });
+
             if('${bhv}'=='1'){
                 setReadOnly();
             }
@@ -159,6 +168,9 @@
 	</script>
 </head>
 <body class="hideScroll">
+	<shiro:hasPermission name="checkmodel:machineOrder:import">
+		<table:importExcel url="${ctx}/checkmodel/productinfo/machineOrder/import?id=${machineOrder.id}&template=machine.xlsx"></table:importExcel><!-- 导入按钮 -->
+	</shiro:hasPermission>
 	<form:form id="inputForm" modelAttribute="machineOrder" action="${ctx}/checkmodel/productinfo/machineOrder/save" method="post" class="form-horizontal">
 		<input type="hidden" name="type" value="${type }" />
 		<form:hidden path="id"/>
@@ -179,7 +191,7 @@
 					   <label class="pull-right"><font color="red">*</font>数量：</label>
 				   </td>
 				   <td class="width-35">
-					   <form:input path="quantity" htmlEscape="false"    class="form-control required"/>
+					   <form:input path="quantity" htmlEscape="false"  onkeyup='clearNoNum(this)'  class="form-control required number"/>
 				   </td>
 			   </tr>
 
@@ -189,13 +201,17 @@
 					   <label class="pull-right"><font color="red"></font>预计上线日期：</label>
 				   </td>
 				   <td class="width-35">
-					   <form:input path="expectDate" htmlEscape="false"    class="form-control "/>
+					   <%--<form:input path="expectDate" htmlEscape="false"    class="form-control "/>--%>
+					   <input id="expectDate" name="expectDate" type="text" maxlength="20" class="laydate-icon form-control layer-date"
+							  value="<fmt:formatDate value="${machineOrder.expectDate}" pattern="yyyy-MM-dd"/>"/>
 				   </td>
 				   <td class="width-15 active">
 					   <label class="pull-right"><font color="red"></font>实际上线日期：</label>
 				   </td>
 				   <td class="width-35">
-					   <form:input path="realDate" htmlEscape="false"    class="form-control "/>
+					   <%--<form:input path="realDate" htmlEscape="false"    class="form-control "/>--%>
+					   <input id="realDate" name="realDate" type="text" maxlength="20" class="laydate-icon form-control layer-date"
+							  value="<fmt:formatDate value="${machineOrder.realDate}" pattern="yyyy-MM-dd"/>"/>
 				   </td>
 			   </tr>
 
@@ -344,45 +360,45 @@
 					</td>
 
 					<td width="60">
-						<input id="machineOrderDetailList{{idx}}_code1" name="machineOrderDetailList[{{idx}}].code1" type="text" value="{{row.code1}}"    class="form-control required" maxlength=50 onmouseover="this.title=this.value"/>
+						<input id="machineOrderDetailList{{idx}}_code1" name="machineOrderDetailList[{{idx}}].code1" type="text" value="{{row.code1}}"    class="form-control " maxlength=50 onmouseover="this.title=this.value"/>
 					</td>
 
 
 					<td width="60">
-						<input id="machineOrderDetailList{{idx}}_code2" name="machineOrderDetailList[{{idx}}].code2" type="text" value="{{row.code2}}"    class="form-control required" maxlength=50 onmouseover="this.title=this.value"/>
+						<input id="machineOrderDetailList{{idx}}_code2" name="machineOrderDetailList[{{idx}}].code2" type="text" value="{{row.code2}}"    class="form-control " maxlength=50 onmouseover="this.title=this.value"/>
 					</td>
 
 
 					<td width="60">
-						<input id="machineOrderDetailList{{idx}}_code3" name="machineOrderDetailList[{{idx}}].code3" type="text" value="{{row.code3}}"    class="form-control required" maxlength=50 onmouseover="this.title=this.value"/>
+						<input id="machineOrderDetailList{{idx}}_code3" name="machineOrderDetailList[{{idx}}].code3" type="text" value="{{row.code3}}"    class="form-control " maxlength=50 onmouseover="this.title=this.value"/>
 					</td>
 
 					<td width="60">
-						<input id="machineOrderDetailList{{idx}}_code4" name="machineOrderDetailList[{{idx}}].code4" type="text" value="{{row.code4}}"    class="form-control required" maxlength=50 onmouseover="this.title=this.value"/>
+						<input id="machineOrderDetailList{{idx}}_code4" name="machineOrderDetailList[{{idx}}].code4" type="text" value="{{row.code4}}"    class="form-control " maxlength=50 onmouseover="this.title=this.value"/>
 					</td>
 
 					<td width="60">
-						<input id="machineOrderDetailList{{idx}}_code5" name="machineOrderDetailList[{{idx}}].code5" type="text" value="{{row.code5}}"    class="form-control required" maxlength=50 onmouseover="this.title=this.value"/>
+						<input id="machineOrderDetailList{{idx}}_code5" name="machineOrderDetailList[{{idx}}].code5" type="text" value="{{row.code5}}"    class="form-control " maxlength=50 onmouseover="this.title=this.value"/>
 					</td>
 
 					<td width="60">
-						<input id="machineOrderDetailList{{idx}}_code6" name="machineOrderDetailList[{{idx}}].code6" type="text" value="{{row.code6}}"    class="form-control required" maxlength=50 onmouseover="this.title=this.value"/>
+						<input id="machineOrderDetailList{{idx}}_code6" name="machineOrderDetailList[{{idx}}].code6" type="text" value="{{row.code6}}"    class="form-control " maxlength=50 onmouseover="this.title=this.value"/>
 					</td>
 
 					<td width="60">
-						<input id="machineOrderDetailList{{idx}}_code7" name="machineOrderDetailList[{{idx}}].code7" type="text" value="{{row.code7}}"    class="form-control required" maxlength=50 onmouseover="this.title=this.value"/>
+						<input id="machineOrderDetailList{{idx}}_code7" name="machineOrderDetailList[{{idx}}].code7" type="text" value="{{row.code7}}"    class="form-control " maxlength=50 onmouseover="this.title=this.value"/>
 					</td>
 
 					<td width="60">
-						<input id="machineOrderDetailList{{idx}}_code8" name="machineOrderDetailList[{{idx}}].code8" type="text" value="{{row.code8}}"    class="form-control required" maxlength=50 onmouseover="this.title=this.value"/>
+						<input id="machineOrderDetailList{{idx}}_code8" name="machineOrderDetailList[{{idx}}].code8" type="text" value="{{row.code8}}"    class="form-control " maxlength=50 onmouseover="this.title=this.value"/>
 					</td>
 
 					<td width="60">
-						<input id="machineOrderDetailList{{idx}}_code9" name="machineOrderDetailList[{{idx}}].code9" type="text" value="{{row.code9}}"    class="form-control required" maxlength=50 onmouseover="this.title=this.value"/>
+						<input id="machineOrderDetailList{{idx}}_code9" name="machineOrderDetailList[{{idx}}].code9" type="text" value="{{row.code9}}"    class="form-control " maxlength=50 onmouseover="this.title=this.value"/>
 					</td>
 
 					<td width="60">
-						<input id="machineOrderDetailList{{idx}}_code10" name="machineOrderDetailList[{{idx}}].code10" type="text" value="{{row.code10}}"    class="form-control required" maxlength=50 onmouseover="this.title=this.value"/>
+						<input id="machineOrderDetailList{{idx}}_code10" name="machineOrderDetailList[{{idx}}].code10" type="text" value="{{row.code10}}"    class="form-control " maxlength=50 onmouseover="this.title=this.value"/>
 					</td>
 
 					<td class="text-center" width="10">

@@ -26,7 +26,9 @@
 		a.expand2 AS "expand2"
 	</sql>
 
-	
+	<sql id="machineOrderDetailJoins">
+		LEFT JOIN machine_orderdtl b ON a.id = b.machine_orderid
+	</sql>
     
 	<select id="get" resultType="MachineOrder" >
 		SELECT 
@@ -108,7 +110,36 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
+	<select id="findDetailList" resultType="MachineOrder" >
+		SELECT
+		<include refid="machineOrderColumns"/>
+		FROM machine_order a
+		<include refid="machineOrderDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="codeNo != null and codeNo != ''">
+				AND ( (b.board_record LIKE
+				<if test="dbName == 'oracle'">'%'||#{codeNo}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{codeNo}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{codeNo},'%')</if>
+				) or  (b.machine_record LIKE
+				<if test="dbName == 'oracle'">'%'||#{codeNo}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{codeNo}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{codeNo},'%')</if>
+				) )
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+
 	<insert id="insert">
 		INSERT INTO machine_order(
 			id,

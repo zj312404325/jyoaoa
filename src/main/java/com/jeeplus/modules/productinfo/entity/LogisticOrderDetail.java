@@ -1,6 +1,7 @@
 package com.jeeplus.modules.productinfo.entity;
 
 import com.jeeplus.common.persistence.DataEntity;
+import com.jeeplus.common.utils.excel.annotation.ExcelField;
 
 
 /**
@@ -38,6 +39,7 @@ public class LogisticOrderDetail extends DataEntity<LogisticOrderDetail> {
         this.logisticOrder = logisticOrder;
     }
 
+    @ExcelField(title="产品条码记录", align=2, sort=1)
     public String getProdRecord() {
         return prodRecord;
     }

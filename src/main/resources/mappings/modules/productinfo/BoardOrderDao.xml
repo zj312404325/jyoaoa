@@ -20,7 +20,9 @@
 		a.pcb AS "pcb"
 	</sql>
 
-	
+	<sql id="boardOrderDetailJoins">
+		LEFT JOIN board_orderdtl b ON a.id = b.board_orderid
+	</sql>
     
 	<select id="get" resultType="BoardOrder" >
 		SELECT 
@@ -81,6 +83,31 @@
 			</otherwise>
 		</choose>
 	</select>
+
+	<select id="findDetailList" resultType="BoardOrder" >
+		SELECT
+		<include refid="boardOrderColumns"/>
+		FROM board_order a
+		<include refid="boardOrderDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="codeNo != null and codeNo != ''">
+				AND b.board_record LIKE
+				<if test="dbName == 'oracle'">'%'||#{codeNo}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{codeNo}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{codeNo},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+
 	
 	<select id="findAllList" resultType="BoardOrder" >
 		SELECT 

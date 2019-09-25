@@ -9,9 +9,22 @@
         function searchProduct(){//重置，页码清零
             var typeValue=${type};
             var url;
-            codeNo=$("#codeNo").val();
-            console.log(typeValue);
-            if(typeValue!=null&&typeValue=='0'){
+            codeNo=$("#codeNo").val().trim();
+
+            if (codeNo.length == 0) {
+                //alert('SN号不能为空！');
+                layer.alert("SN号不能为空！",{icon:2});
+                return false;
+            }
+
+            url="${ctx}/checkmodel/productinfo/boardOrder/codeNoList?${repage}&codeNo="+codeNo;
+            $("#contentIframe1").attr('src', url);
+            url="${ctx}/checkmodel/productinfo/machineOrder/codeNoList?${repage}&codeNo="+codeNo;
+            $("#contentIframe2").attr('src', url);
+            url="${ctx}/checkmodel/productinfo/logisticOrder/codeNoList?${repage}&codeNo="+codeNo;
+            $("#contentIframe3").attr('src', url);
+
+            /*if(typeValue!=null&&typeValue=='0'){
                 url="${ctx}/checkmodel/productinfo/boardOrder/list?${repage}&codeNo="+codeNo;
                 $("#contentIframe1").attr('src', url);
 
@@ -23,7 +36,7 @@
             else if(typeValue!=null&&typeValue=='2'){
                 url="${ctx}/checkmodel/productinfo/logisticOrder/list?${repage}&codeNo="+codeNo;
                 $("#contentIframe3").attr('src', url);
-            }
+            }*/
 
             $("#productInfo-content").show();
             return false;

@@ -75,7 +75,8 @@
 			remarks,
 			del_flag,
 			logistic_orderid,
-			prod_record
+			prod_record,
+			sort
 		) VALUES (
 			#{id},
 			#{createBy.id},
@@ -85,7 +86,8 @@
 			#{remarks},
 			#{delFlag},
 			#{logisticOrder.id},
-			#{prodRecord}
+			#{prodRecord},
+			#{sort}
 		)
 	</insert>
 	

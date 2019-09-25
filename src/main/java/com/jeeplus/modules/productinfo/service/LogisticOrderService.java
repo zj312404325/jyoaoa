@@ -8,14 +8,12 @@ import com.jeeplus.modules.productinfo.dao.BoardOrderDao;
 import com.jeeplus.modules.productinfo.dao.BoardOrderDetailDao;
 import com.jeeplus.modules.productinfo.dao.LogisticOrderDao;
 import com.jeeplus.modules.productinfo.dao.LogisticOrderDetailDao;
-import com.jeeplus.modules.productinfo.entity.BoardOrder;
-import com.jeeplus.modules.productinfo.entity.BoardOrderDetail;
-import com.jeeplus.modules.productinfo.entity.LogisticOrder;
-import com.jeeplus.modules.productinfo.entity.LogisticOrderDetail;
+import com.jeeplus.modules.productinfo.entity.*;
 import com.jeeplus.modules.sys.dao.OfficeDao;
 import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.sys.service.PostService;
 import com.jeeplus.modules.sys.utils.UserUtils;
+import org.nutz.dao.Dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +28,9 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true,rollbackFor = Exception.class)
 public class LogisticOrderService extends CrudService<LogisticOrderDao, LogisticOrder> {
+
+    @Autowired
+    private LogisticOrderDao logisticOrderDao;
 
     @Autowired
     private LogisticOrderDetailDao logisticOrderDetailDao;
@@ -50,6 +51,10 @@ public class LogisticOrderService extends CrudService<LogisticOrderDao, Logistic
     @Override
     public Page<LogisticOrder> findPage(Page<LogisticOrder> page, LogisticOrder logisticOrder) {
         return super.findPage(page, logisticOrder);
+    }
+
+    public Page<LogisticOrder> findDetailPage(Page<LogisticOrder> page, LogisticOrder logisticOrder) {
+        return findPageByCode(page, logisticOrder);
     }
 
     @Override
@@ -90,4 +95,26 @@ public class LogisticOrderService extends CrudService<LogisticOrderDao, Logistic
         logisticOrderDetailDao.delete(new LogisticOrderDetail(logisticOrder));
     }
 
+    /**
+     * 查询分页数据
+     * @param page 分页对象
+     * @param entity
+     * @return
+     */
+    public Page<LogisticOrder> findPageByCode(Page<LogisticOrder> page, LogisticOrder entity) {
+        entity.setPage(page);
+        page.setList(logisticOrderDao.findDetailList(entity));
+        return page;
+    }
+
+    @Transactional(readOnly = false)
+    public void save(LogisticOrderDetail logisticOrderDetail) {
+        if (StringUtils.isBlank(logisticOrderDetail.getId())){
+            logisticOrderDetail.preInsert();
+            logisticOrderDetailDao.insert(logisticOrderDetail);
+        }else{
+            logisticOrderDetail.preUpdate();
+            logisticOrderDetailDao.update(logisticOrderDetail);
+        }
+    }
 }

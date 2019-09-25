@@ -54,6 +54,9 @@ public class MachineOrder extends DataEntity<MachineOrder> {
 
     private String sqlstr;
 
+    /**sn编号*/
+    private String codeNo;
+
     public MachineOrder() {
         super();
     }
@@ -212,5 +215,13 @@ public class MachineOrder extends DataEntity<MachineOrder> {
 
     public void setSqlstr(String sqlstr) {
         this.sqlstr = sqlstr;
+    }
+
+    public String getCodeNo() {
+        return codeNo;
+    }
+
+    public void setCodeNo(String codeNo) {
+        this.codeNo = codeNo;
     }
 }

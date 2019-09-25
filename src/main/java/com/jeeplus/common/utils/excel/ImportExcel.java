@@ -292,7 +292,7 @@ public class ImportExcel {
 		//log.debug("Import column count:"+annotationList.size());
 		// Get excel data
 		List<E> dataList = Lists.newArrayList();
-		for (int i = this.getDataRowNum(); i < this.getLastDataRowNum(); i++) {
+		for (int i = this.getDataRowNum()-1; i < this.getLastDataRowNum(); i++) {
 			E e = (E)cls.newInstance();
 			int column = 0;
 			Row row = this.getRow(i);

@@ -30,6 +30,7 @@
 	<sys:message content="${message}"/>
 	<div class="row">
 		<div class="col-sm-12" <c:if test="${isSearch!=null&&isSearch=='0' }">hidden</c:if>>
+
 	<!--查询条件-->
 	<form:form id="searchForm" modelAttribute="boardOrder" action="${ctx}/checkmodel/productinfo/boardOrder/list?cat=depart" method="post" class="form-inline" >
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
@@ -37,17 +38,17 @@
         <%--<form:hidden path="category"/>--%>
 		<table:sortColumn id="orderBy" name="orderBy" value="${page.orderBy}" callback="sortOrRefresh();"/><!-- 支持排序 -->
 		<div class="form-group">
-            <span>固件版本：</span>
-            <form:input path="firmware" class="form-control"/>
+			<span>固件版本：</span>
+			<form:input path="firmware" class="form-control"/>
 
-            <span>产品名称：</span>
-            <form:input path="productName" class="form-control"/>
+			<span>产品名称：</span>
+			<form:input path="productName" class="form-control"/>
 
-            <span>BOM版本：</span>
-            <form:input path="bom" class="form-control"/>
+			<span>BOM版本：</span>
+			<form:input path="bom" class="form-control"/>
 
-            <span>PCB版本：</span>
-            <form:input path="pcb" class="form-control"/>
+			<span>PCB版本：</span>
+			<form:input path="pcb" class="form-control"/>
 
 			<span>开始时间：</span>
 			<input id="startdate" name="startdate" type="text" maxlength="20" class="laydate-icon form-control layer-date required"
@@ -56,10 +57,10 @@
 			<input id="enddate" name="enddate" type="text" maxlength="20" class="laydate-icon form-control layer-date required"
 							value="<fmt:formatDate value="${boardOrder.enddate}" pattern="yyyy-MM-dd"/>"/>
 
-				<div class="pull-right" style="padding-left: 20px">
-					<button  class="btn btn-primary btn-rounded btn-outline btn-sm " onclick="search()" ><i class="fa fa-search"></i> 查询</button>
-					<button  class="btn btn-primary btn-rounded btn-outline btn-sm " onclick="reset1()" ><i class="fa fa-refresh"></i> 重置</button>
-				</div>
+			<div class="pull-right" style="padding-left: 20px">
+				<button  class="btn btn-primary btn-rounded btn-outline btn-sm " onclick="search()" ><i class="fa fa-search"></i> 查询</button>
+				<button  class="btn btn-primary btn-rounded btn-outline btn-sm " onclick="reset1()" ><i class="fa fa-refresh"></i> 重置</button>
+			</div>
 		 </div>	
 	</form:form>
 	</div>
@@ -69,7 +70,9 @@
 	<div class="col-sm-12">
 		<div class="pull-left">
 			<div class="pull-left " <c:if test="${isSearch!=null&&isSearch=='0' }">hidden</c:if>>
-				<table:addRowJump url="${ctx}/checkmodel/productinfo/boardOrder/form?type=0&opt=add" width="80%" title="主板信息"></table:addRowJump><!-- 增加按钮 -->
+				<shiro:hasPermission name="checkmodel:boardOrder:add">
+					<table:addRowJump url="${ctx}/checkmodel/productinfo/boardOrder/form?type=0&opt=add" width="80%" title="主板信息"></table:addRowJump><!-- 增加按钮 -->
+				</shiro:hasPermission>
 				<button class="btn btn-white btn-sm " data-toggle="tooltip" data-placement="left" onclick="sortOrRefresh()" title="刷新"><i class="glyphicon glyphicon-repeat"></i> 刷新</button>
 			</div>
 
@@ -91,6 +94,7 @@
 				<th class="sort-column pcb">PCB版本</th>
 				<th class="sort-column a.expect_date">预计上线时间</th>
 				<th class="sort-column a.real_date">实际上线时间</th>
+                <th class="sort-column a.create_date">创建日期</th>
 				<th>操作</th>
 			</tr>
 		</thead>
@@ -124,9 +128,18 @@
 				<td>
 					<fmt:formatDate value="${boardOrder.realDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
 				</td>
+                <td>
+                    <fmt:formatDate value="${boardOrder.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                </td>
 				<td>
 					<shiro:hasPermission name="checkmodel:boardOrder:view">
 						<a href="#" onclick="openDialogView('查看主板明细', '${ctx}/checkmodel/productinfo/boardOrder/form?id=${boardOrder.id}&type=1&bhv=1','1200px', '500px')" class="btn btn-info btn-xs" ><i class="fa fa-search-plus"></i> 查看</a>
+					</shiro:hasPermission>
+					<shiro:hasPermission name="checkmodel:boardOrder:edit">
+						<a href="#" onclick="openDialog('修改主板明细', '${ctx}/checkmodel/productinfo/boardOrder/form?id=${boardOrder.id}&type=0','1200px', '500px')" class="btn btn-success btn-xs" ><i class="fa fa-edit"></i> 修改</a>
+					</shiro:hasPermission>
+					<shiro:hasPermission name="checkmodel:boardOrder:del">
+						<a href="${ctx}/checkmodel/productinfo/boardOrder/delete?id=${boardOrder.id}&type=0" onclick="return confirmxParent('确认要删除该主板信息吗？', this.href)"   class="btn btn-danger btn-xs"><i class="fa fa-trash"></i> 删除</a>
 					</shiro:hasPermission>
 				</td>
 			</tr>

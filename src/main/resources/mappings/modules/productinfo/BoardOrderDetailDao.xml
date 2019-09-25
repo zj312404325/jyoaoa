@@ -87,7 +87,8 @@
 			lable3,
 			lable4,
 			lable5,
-			lable6
+			lable6,
+			sort
 		) VALUES (
 			#{id},
 			#{createBy.id},
@@ -103,7 +104,8 @@
 			#{lable3},
 			#{lable4},
 			#{lable5},
-			#{lable6}
+			#{lable6},
+			#{sort}
 		)
 	</insert>
 

@@ -25,7 +25,9 @@
 		a.trans_person AS "transPerson"
 	</sql>
 
-	
+	<sql id="logisticOrderDetailJoins">
+		LEFT JOIN logistic_orderdtl b ON a.id = b.logistic_orderid
+	</sql>
     
 	<select id="get" resultType="LogisticOrder" >
 		SELECT 
@@ -86,7 +88,31 @@
 			</otherwise>
 		</choose>
 	</select>
-	
+
+	<select id="findDetailList" resultType="LogisticOrder" >
+		SELECT
+		<include refid="logisticOrderColumns"/>
+		FROM logistic_order a
+		<include refid="logisticOrderDetailJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="codeNo != null and codeNo != ''">
+				AND b.prod_record LIKE
+				<if test="dbName == 'oracle'">'%'||#{codeNo}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{codeNo}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{codeNo},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date ASC
+			</otherwise>
+		</choose>
+	</select>
+
 	<insert id="insert">
 		INSERT INTO logistic_order(
 			id,

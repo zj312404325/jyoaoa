@@ -43,6 +43,15 @@
         }
 
 		$(document).ready(function() {
+            laydate({
+                elem: '#expectDate', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+                event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+            });
+            laydate({
+                elem: '#realDate', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+                event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+            });
+
             if('${bhv}'=='1'){
                 setReadOnly();
             }
@@ -159,6 +168,9 @@
 	</script>
 </head>
 <body class="hideScroll">
+	<shiro:hasPermission name="checkmodel:boardOrder:import">
+		<table:importExcel url="${ctx}/checkmodel/productinfo/boardOrder/import?id=${boardOrder.id}&template=board.xlsx"></table:importExcel><!-- 导入按钮 -->
+	</shiro:hasPermission>
 	<form:form id="inputForm" modelAttribute="boardOrder" action="${ctx}/checkmodel/productinfo/boardOrder/save" method="post" class="form-horizontal">
 		<input type="hidden" name="type" value="${type }" />
 		<form:hidden path="id"/>
@@ -179,7 +191,7 @@
 					   <label class="pull-right"><font color="red">*</font>数量：</label>
 				   </td>
 				   <td class="width-35">
-					   <form:input path="quantity" htmlEscape="false"    class="form-control required"/>
+					   <form:input path="quantity" htmlEscape="false"  onkeyup='clearNoNum(this)'  class="form-control number"/>
 				   </td>
 			   </tr>
 
@@ -189,13 +201,17 @@
 					   <label class="pull-right"><font color="red"></font>预计上线日期：</label>
 				   </td>
 				   <td class="width-35">
-					   <form:input path="expectDate" htmlEscape="false"    class="form-control "/>
+					   <%--<form:input path="expectDate" htmlEscape="false"    class="form-control "/>--%>
+					   <input id="expectDate" name="expectDate" type="text" maxlength="20" class="laydate-icon form-control layer-date"
+							  value="<fmt:formatDate value="${boardOrder.expectDate}" pattern="yyyy-MM-dd"/>"/>
 				   </td>
 				   <td class="width-15 active">
 					   <label class="pull-right"><font color="red"></font>实际上线日期：</label>
 				   </td>
 				   <td class="width-35">
-					   <form:input path="realDate" htmlEscape="false"    class="form-control "/>
+					   <%--<form:input path="realDate" htmlEscape="false"    class="form-control "/>--%>
+					   <input id="realDate" name="realDate" type="text" maxlength="20" class="laydate-icon form-control layer-date"
+							  value="<fmt:formatDate value="${boardOrder.realDate}" pattern="yyyy-MM-dd"/>"/>
 				   </td>
 			   </tr>
 
@@ -257,6 +273,7 @@
 			</ul>
 				<div class="panel-body active">
 			<a class="btn btn-white btn-sm" onclick="addRow('#boardOrderDetailList', boardOrderDetailRowIdx, boardOrderDetailTpl);boardOrderDetailRowIdx = boardOrderDetailRowIdx + 1;" title="新增"><i class="fa fa-plus"></i> 新增</a>
+
 			<table id="contentTable2" class="table table-striped table-bordered table-condensed dataTable tbdisable">
 				<thead>
 					<tr>
@@ -287,29 +304,29 @@
 					</td>
 
 					<td width="60">
-						<input id="boardOrderDetailList{{idx}}_lable1" name="boardOrderDetailList[{{idx}}].lable1" type="text" value="{{row.lable1}}"    class="form-control required" maxlength=50 onmouseover="this.title=this.value"/>
+						<input id="boardOrderDetailList{{idx}}_lable1" name="boardOrderDetailList[{{idx}}].lable1" type="text" value="{{row.lable1}}"    class="form-control " maxlength=50 onmouseover="this.title=this.value"/>
 					</td>
 
 
 					<td width="60">
-						<input id="boardOrderDetailList{{idx}}_lable2" name="boardOrderDetailList[{{idx}}].lable2" type="text" value="{{row.lable2}}"    class="form-control required" maxlength=50 onmouseover="this.title=this.value"/>
+						<input id="boardOrderDetailList{{idx}}_lable2" name="boardOrderDetailList[{{idx}}].lable2" type="text" value="{{row.lable2}}"    class="form-control " maxlength=50 onmouseover="this.title=this.value"/>
 					</td>
 
 
 					<td width="60">
-						<input id="boardOrderDetailList{{idx}}_lable3" name="boardOrderDetailList[{{idx}}].lable3" type="text" value="{{row.lable3}}"    class="form-control required" maxlength=50 onmouseover="this.title=this.value"/>
+						<input id="boardOrderDetailList{{idx}}_lable3" name="boardOrderDetailList[{{idx}}].lable3" type="text" value="{{row.lable3}}"    class="form-control " maxlength=50 onmouseover="this.title=this.value"/>
 					</td>
 
 					<td width="60">
-						<input id="boardOrderDetailList{{idx}}_lable4" name="boardOrderDetailList[{{idx}}].lable4" type="text" value="{{row.lable4}}"    class="form-control required" maxlength=50 onmouseover="this.title=this.value"/>
+						<input id="boardOrderDetailList{{idx}}_lable4" name="boardOrderDetailList[{{idx}}].lable4" type="text" value="{{row.lable4}}"    class="form-control " maxlength=50 onmouseover="this.title=this.value"/>
 					</td>
 
 					<td width="60">
-						<input id="boardOrderDetailList{{idx}}_lable5" name="boardOrderDetailList[{{idx}}].lable5" type="text" value="{{row.lable5}}"    class="form-control required" maxlength=50 onmouseover="this.title=this.value"/>
+						<input id="boardOrderDetailList{{idx}}_lable5" name="boardOrderDetailList[{{idx}}].lable5" type="text" value="{{row.lable5}}"    class="form-control " maxlength=50 onmouseover="this.title=this.value"/>
 					</td>
 
 					<td width="60">
-						<input id="boardOrderDetailList{{idx}}_lable6" name="boardOrderDetailList[{{idx}}].lable6" type="text" value="{{row.lable6}}"    class="form-control required" maxlength=50 onmouseover="this.title=this.value"/>
+						<input id="boardOrderDetailList{{idx}}_lable6" name="boardOrderDetailList[{{idx}}].lable6" type="text" value="{{row.lable6}}"    class="form-control " maxlength=50 onmouseover="this.title=this.value"/>
 					</td>
 					<td class="text-center" width="10">
 						{{#delBtn}}<span class="close" onclick="delRow(this, '#boardOrderDetailList{{idx}}')" title="删除">&times;</span>{{/delBtn}}

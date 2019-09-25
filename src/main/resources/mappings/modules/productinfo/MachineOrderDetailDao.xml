@@ -97,7 +97,8 @@
 			code7,
 			code8,
 			code9,
-			code10
+			code10,
+			sort
 		) VALUES (
 			#{id},
 			#{createBy.id},
@@ -118,7 +119,8 @@
 			#{code7},
 			#{code8},
 			#{code9},
-			#{code10}
+			#{code10},
+			#{sort}
 		)
 	</insert>
 	
@@ -139,7 +141,7 @@
 			code7 = #{code7},
 			code8 = #{code8},
 			code9 = #{code9},
-			code10 = #{code10},
+			code10 = #{code10}
 		WHERE id = #{id}
 	</update>
 	

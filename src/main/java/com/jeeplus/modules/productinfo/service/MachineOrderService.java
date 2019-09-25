@@ -6,9 +6,7 @@ import com.jeeplus.common.utils.FormatUtil;
 import com.jeeplus.common.utils.StringUtils;
 import com.jeeplus.modules.productinfo.dao.MachineOrderDao;
 import com.jeeplus.modules.productinfo.dao.MachineOrderDetailDao;
-import com.jeeplus.modules.productinfo.entity.BoardOrderDetail;
-import com.jeeplus.modules.productinfo.entity.MachineOrder;
-import com.jeeplus.modules.productinfo.entity.MachineOrderDetail;
+import com.jeeplus.modules.productinfo.entity.*;
 import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.sys.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +24,9 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true,rollbackFor = Exception.class)
 public class MachineOrderService extends CrudService<MachineOrderDao, MachineOrder> {
+
+    @Autowired
+    private MachineOrderDao machineOrderDao;
 
     @Autowired
     private MachineOrderDetailDao machineOrderDetailDao;
@@ -46,6 +47,10 @@ public class MachineOrderService extends CrudService<MachineOrderDao, MachineOrd
     @Override
     public Page<MachineOrder> findPage(Page<MachineOrder> page, MachineOrder machineOrder) {
         return super.findPage(page, machineOrder);
+    }
+
+    public Page<MachineOrder> findDetailPage(Page<MachineOrder> page, MachineOrder machineOrder) {
+        return findPageByCode(page, machineOrder);
     }
 
     @Override
@@ -86,4 +91,26 @@ public class MachineOrderService extends CrudService<MachineOrderDao, MachineOrd
         machineOrderDetailDao.delete(new MachineOrderDetail(machineOrder));
     }
 
+    /**
+     * 查询分页数据
+     * @param page 分页对象
+     * @param entity
+     * @return
+     */
+    public Page<MachineOrder> findPageByCode(Page<MachineOrder> page, MachineOrder entity) {
+        entity.setPage(page);
+        page.setList(machineOrderDao.findDetailList(entity));
+        return page;
+    }
+
+    @Transactional(readOnly = false)
+    public void save(MachineOrderDetail machineOrderDetail) {
+        if (StringUtils.isBlank(machineOrderDetail.getId())){
+            machineOrderDetail.preInsert();
+            machineOrderDetailDao.insert(machineOrderDetail);
+        }else{
+            machineOrderDetail.preUpdate();
+            machineOrderDetailDao.update(machineOrderDetail);
+        }
+    }
 }

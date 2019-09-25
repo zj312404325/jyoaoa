@@ -1,6 +1,7 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
 <%@ include file="/webpage/include/taglib.jsp"%>
 <%@ attribute name="url" type="java.lang.String" required="true"%>
+<%@ attribute name="template" type="java.lang.String" required="false"%>
 <%-- 使用方法： 1.将本tag写在查询的form之前；2.传入controller的url --%>
 <button id="btnImport" class="btn btn-white btn-sm " data-toggle="tooltip" data-placement="left" title="导入"><i class="fa fa-folder-open-o"></i> 导入</button>
 <div id="importBox" class="hide">
@@ -13,6 +14,9 @@
 </div>
 <script type="text/javascript">
 $(document).ready(function() {
+    var urlString='${url}';
+    var index=urlString.lastIndexOf("\=");
+    var template=urlString.substring(index+1,urlString.length);
 	$("#btnImport").click(function(){
 		top.layer.open({
 		    type: 1, 
@@ -21,7 +25,7 @@ $(document).ready(function() {
 		    content:$("#importBox").html() ,
 		    btn: ['下载模板','确定', '关闭'],
 			    btn1: function(index, layero){
-				  window.location.href='${url}/template';
+				  window.location.href='../../../download/'+template;
 			  },
 		    btn2: function(index, layero){
 			        var inputForm =top.$("#importForm");
@@ -29,6 +33,7 @@ $(document).ready(function() {
 			        inputForm.attr("target",top_iframe);//表单提交成功后，从服务器返回的url在当前tab中展示
     	       		top.$("#importForm").submit();
 				    top.layer.close(index);
+                	top.layer.closeAll();
 			  },
 			 
 			  btn3: function(index){ 

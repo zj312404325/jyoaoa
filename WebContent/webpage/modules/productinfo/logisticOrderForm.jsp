@@ -159,6 +159,9 @@
 	</script>
 </head>
 <body class="hideScroll">
+	<shiro:hasPermission name="checkmodel:logisticOrder:import">
+		<table:importExcel url="${ctx}/checkmodel/productinfo/logisticOrder/import?id=${logisticOrder.id}&template=logistic.xlsx"></table:importExcel><!-- 导入按钮 -->
+	</shiro:hasPermission>
 	<form:form id="inputForm" modelAttribute="logisticOrder" action="${ctx}/checkmodel/productinfo/logisticOrder/save" method="post" class="form-horizontal">
 		<input type="hidden" name="type" value="${type }" />
 		<form:hidden path="id"/>
@@ -179,7 +182,7 @@
 					   <label class="pull-right"><font color="red">*</font>发货数量：</label>
 				   </td>
 				   <td class="width-35">
-					   <form:input path="quantity" htmlEscape="false"    class="form-control required"/>
+					   <form:input path="quantity" htmlEscape="false"   onkeyup='clearNoNum(this)'  class="form-control required number"/>
 				   </td>
 			   </tr>
 

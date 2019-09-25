@@ -26,11 +26,17 @@ public class BoardOrderDetail extends DataEntity<BoardOrderDetail> {
     /**排序*/
     private Integer sort;
 
+
     private String lable1;
+
     private String lable2;
+
     private String lable3;
+
     private String lable4;
+
     private String lable5;
+
     private String lable6;
 
     public BoardOrderDetail() {
@@ -53,6 +59,7 @@ public class BoardOrderDetail extends DataEntity<BoardOrderDetail> {
         this.boardOrder = boardOrder;
     }
 
+    @ExcelField(title="主板条码记录", align=2, sort=1)
     public String getBoardRecord() {
         return boardRecord;
     }
@@ -61,6 +68,7 @@ public class BoardOrderDetail extends DataEntity<BoardOrderDetail> {
         this.boardRecord = boardRecord;
     }
 
+    @ExcelField(title="lable1", align=2, sort=2)
     public String getLable1() {
         return lable1;
     }
@@ -69,6 +77,7 @@ public class BoardOrderDetail extends DataEntity<BoardOrderDetail> {
         this.lable1 = lable1;
     }
 
+    @ExcelField(title="lable2", align=2, sort=3)
     public String getLable2() {
         return lable2;
     }
@@ -77,6 +86,7 @@ public class BoardOrderDetail extends DataEntity<BoardOrderDetail> {
         this.lable2 = lable2;
     }
 
+    @ExcelField(title="lable3", align=2, sort=4)
     public String getLable3() {
         return lable3;
     }
@@ -85,6 +95,7 @@ public class BoardOrderDetail extends DataEntity<BoardOrderDetail> {
         this.lable3 = lable3;
     }
 
+    @ExcelField(title="lable4", align=2, sort=5)
     public String getLable4() {
         return lable4;
     }
@@ -93,6 +104,7 @@ public class BoardOrderDetail extends DataEntity<BoardOrderDetail> {
         this.lable4 = lable4;
     }
 
+    @ExcelField(title="lable5", align=2, sort=6)
     public String getLable5() {
         return lable5;
     }
@@ -101,6 +113,7 @@ public class BoardOrderDetail extends DataEntity<BoardOrderDetail> {
         this.lable5 = lable5;
     }
 
+    @ExcelField(title="lable6", align=2, sort=7)
     public String getLable6() {
         return lable6;
     }
