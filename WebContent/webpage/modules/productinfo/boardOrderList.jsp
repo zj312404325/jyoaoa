@@ -133,7 +133,7 @@
                 </td>
 				<td>
 					<shiro:hasPermission name="checkmodel:boardOrder:view">
-						<a href="#" onclick="openDialogView('查看主板明细', '${ctx}/checkmodel/productinfo/boardOrder/form?id=${boardOrder.id}&type=1&bhv=1','1200px', '500px')" class="btn btn-info btn-xs" ><i class="fa fa-search-plus"></i> 查看</a>
+						<a href="#" onclick="openDialogView('查看主板明细', '${ctx}/checkmodel/productinfo/boardOrder/form?id=${boardOrder.id}&type=1&bhv=1&codeNo=${codeNo}','1200px', '500px')" class="btn btn-info btn-xs" ><i class="fa fa-search-plus"></i> 查看</a>
 					</shiro:hasPermission>
 					<shiro:hasPermission name="checkmodel:boardOrder:edit">
 						<a href="#" onclick="openDialog('修改主板明细', '${ctx}/checkmodel/productinfo/boardOrder/form?id=${boardOrder.id}&type=0','1200px', '500px')" class="btn btn-success btn-xs" ><i class="fa fa-edit"></i> 修改</a>

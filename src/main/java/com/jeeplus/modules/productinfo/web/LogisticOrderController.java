@@ -1,5 +1,6 @@
 package com.jeeplus.modules.productinfo.web;
 
+import com.google.common.collect.Lists;
 import com.jeeplus.common.config.Global;
 import com.jeeplus.common.persistence.Page;
 import com.jeeplus.common.utils.FormatUtil;
@@ -92,6 +93,7 @@ public class LogisticOrderController extends BaseController {
     public String codeNoList(LogisticOrder logisticOrder, HttpServletRequest request, HttpServletResponse response, Model model) {
         User user= UserUtils.getUser();
         String codeNo=request.getParameter("codeNo");
+        model.addAttribute("codeNo",codeNo);
         if(FormatUtil.isNoEmpty(codeNo)){
             model.addAttribute("isSearch","0");
         }
@@ -114,6 +116,18 @@ public class LogisticOrderController extends BaseController {
         request.setAttribute("type", request.getParameter("type"));
 
         model.addAttribute("logisticOrder", logisticOrder);
+
+        //过滤查询的SN号
+        List<LogisticOrderDetail> logisticOrderDetailList = Lists.newArrayList();
+        String codeNo=request.getParameter("codeNo");
+        if(FormatUtil.isNoEmpty(codeNo)){
+            for(LogisticOrderDetail detail:logisticOrder.getLogisticOrderDetailList()){
+                if(detail.getProdRecord().contains(codeNo)){
+                    logisticOrderDetailList.add(detail);
+                }
+            }
+            logisticOrder.setLogisticOrderDetailList(logisticOrderDetailList);
+        }
 
         if(FormatUtil.isNoEmpty(request.getParameter("type"))&&("1".equals(request.getParameter("type")))){
             return "modules/productinfo/logisticOrderForm";

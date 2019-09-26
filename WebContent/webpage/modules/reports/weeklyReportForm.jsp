@@ -144,7 +144,7 @@
 		
 		function compare(obj1){
 			var num1 = $(obj1).closest("tr").find("input.number").val();
-            var reg = /^[1-9]\d*\.[5]$|0\.[5]$|^[1-9]\d*$/;
+            var reg = /^[0-9]\d*\.[5]$|0\.[5]$|^[0-9]\d*$/;
 
             if('' != num1.replace(reg,'')){
                 num1 = num1.match(reg) == null  ?  '' : num1.match(reg);

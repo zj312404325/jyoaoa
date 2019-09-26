@@ -112,7 +112,7 @@
 	</select>
 
 	<select id="findDetailList" resultType="MachineOrder" >
-		SELECT
+		SELECT DISTINCT
 		<include refid="machineOrderColumns"/>
 		FROM machine_order a
 		<include refid="machineOrderDetailJoins"/>

@@ -90,7 +90,7 @@
 	</select>
 
 	<select id="findDetailList" resultType="LogisticOrder" >
-		SELECT
+		SELECT DISTINCT
 		<include refid="logisticOrderColumns"/>
 		FROM logistic_order a
 		<include refid="logisticOrderDetailJoins"/>

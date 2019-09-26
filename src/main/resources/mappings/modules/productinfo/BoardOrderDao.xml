@@ -85,7 +85,7 @@
 	</select>
 
 	<select id="findDetailList" resultType="BoardOrder" >
-		SELECT
+		SELECT DISTINCT
 		<include refid="boardOrderColumns"/>
 		FROM board_order a
 		<include refid="boardOrderDetailJoins"/>

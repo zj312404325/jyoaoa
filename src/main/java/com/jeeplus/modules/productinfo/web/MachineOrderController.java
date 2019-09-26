@@ -1,5 +1,6 @@
 package com.jeeplus.modules.productinfo.web;
 
+import com.google.common.collect.Lists;
 import com.jeeplus.common.config.Global;
 import com.jeeplus.common.persistence.Page;
 import com.jeeplus.common.utils.FormatUtil;
@@ -92,6 +93,7 @@ public class MachineOrderController extends BaseController {
     public String codeNoList(MachineOrder machineOrder, HttpServletRequest request, HttpServletResponse response, Model model) {
         User user= UserUtils.getUser();
         String codeNo=request.getParameter("codeNo");
+        model.addAttribute("codeNo",codeNo);
         if(FormatUtil.isNoEmpty(codeNo)){
             model.addAttribute("isSearch","0");
         }
@@ -114,6 +116,18 @@ public class MachineOrderController extends BaseController {
         request.setAttribute("type", request.getParameter("type"));
 
         model.addAttribute("machineOrder", machineOrder);
+
+        //过滤查询的SN号
+        List<MachineOrderDetail> machineOrderDetailList = Lists.newArrayList();
+        String codeNo=request.getParameter("codeNo");
+        if(FormatUtil.isNoEmpty(codeNo)){
+            for(MachineOrderDetail detail:machineOrder.getMachineOrderDetailList()){
+                if(detail.getBoardRecord().contains(codeNo) || detail.getMachineRecord().contains(codeNo)){
+                    machineOrderDetailList.add(detail);
+                }
+            }
+            machineOrder.setMachineOrderDetailList(machineOrderDetailList);
+        }
 
         if(FormatUtil.isNoEmpty(request.getParameter("type"))&&("1".equals(request.getParameter("type")))){
             return "modules/productinfo/machineOrderForm";

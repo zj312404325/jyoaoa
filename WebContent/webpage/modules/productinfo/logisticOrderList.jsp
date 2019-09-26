@@ -147,7 +147,7 @@
 
 				<td>
 					<shiro:hasPermission name="checkmodel:logisticOrder:view">
-						<a href="#" onclick="openDialogView('查看发货明细', '${ctx}/checkmodel/productinfo/logisticOrder/form?id=${logisticOrder.id}&type=1&bhv=1','1200px', '500px')" class="btn btn-info btn-xs" ><i class="fa fa-search-plus"></i> 查看</a>
+						<a href="#" onclick="openDialogView('查看发货明细', '${ctx}/checkmodel/productinfo/logisticOrder/form?id=${logisticOrder.id}&type=1&bhv=1&codeNo=${codeNo}','1200px', '500px')" class="btn btn-info btn-xs" ><i class="fa fa-search-plus"></i> 查看</a>
 					</shiro:hasPermission>
 					<shiro:hasPermission name="checkmodel:machineOrder:edit">
 						<a href="#" onclick="openDialog('修改发货明细', '${ctx}/checkmodel/productinfo/logisticOrder/form?id=${logisticOrder.id}&type=0','1200px', '500px')" class="btn btn-success btn-xs" ><i class="fa fa-edit"></i> 修改</a>
