@@ -160,7 +160,7 @@
 </head>
 <body class="hideScroll">
 	<shiro:hasPermission name="checkmodel:logisticOrder:import">
-		<table:importExcel url="${ctx}/checkmodel/productinfo/logisticOrder/import?id=${logisticOrder.id}&template=logistic.xlsx"></table:importExcel><!-- 导入按钮 -->
+		<table:importExcel url="${ctx}/checkmodel/productinfo/logisticOrder/import?id=${logisticOrder.id}&template=发货明细模板.xlsx"></table:importExcel><!-- 导入按钮 -->
 	</shiro:hasPermission>
 	<form:form id="inputForm" modelAttribute="logisticOrder" action="${ctx}/checkmodel/productinfo/logisticOrder/save" method="post" class="form-horizontal">
 		<input type="hidden" name="type" value="${type }" />

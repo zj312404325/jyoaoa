@@ -196,6 +196,11 @@ public class LogisticOrderController extends BaseController {
             ImportExcel ei = new ImportExcel(file, 1, 0);
             List<LogisticOrderDetail> list = ei.getDataList(LogisticOrderDetail.class);
 
+            if(StringUtils.isBlank(logisticOrder.getId())){
+                addMessage(redirectAttributes, "导入发货明细信息记录失败！失败信息：请先保存发货工单，再导入明细信息！");
+                return "redirect:"+Global.getAdminPath()+"/checkmodel/productinfo/logisticOrder/logisticOrderIndex?repage=repage&type=0";
+            }
+
             for (LogisticOrderDetail logisticOrderDetail : list){
                 try{
                     logisticOrderDetail.setLogisticOrder(logisticOrder);

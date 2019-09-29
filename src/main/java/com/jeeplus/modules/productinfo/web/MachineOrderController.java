@@ -195,6 +195,11 @@ public class MachineOrderController extends BaseController {
             StringBuilder failureMsg = new StringBuilder();
             ImportExcel ei = new ImportExcel(file, 1, 0);
             List<MachineOrderDetail> list = ei.getDataList(MachineOrderDetail.class);
+
+            if(StringUtils.isBlank(machineOrder.getId())){
+                addMessage(redirectAttributes, "导入整机明细信息记录失败！失败信息：请先保存整机工单，再导入明细信息！");
+                return "redirect:"+Global.getAdminPath()+"/checkmodel/productinfo/machineOrder/machineOrderIndex?repage=repage&type=0";
+            }
             //明细数量必须小于等于主表生产数量
             if(list.size()>machineOrder.getQuantity()){
                 addMessage(redirectAttributes, "导入整机明细信息记录失败！失败信息：导入明细数量不能大于生产数量！");

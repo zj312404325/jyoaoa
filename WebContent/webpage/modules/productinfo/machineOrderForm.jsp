@@ -169,7 +169,7 @@
 </head>
 <body class="hideScroll">
 	<shiro:hasPermission name="checkmodel:machineOrder:import">
-		<table:importExcel url="${ctx}/checkmodel/productinfo/machineOrder/import?id=${machineOrder.id}&template=machine.xlsx"></table:importExcel><!-- 导入按钮 -->
+		<table:importExcel url="${ctx}/checkmodel/productinfo/machineOrder/import?id=${machineOrder.id}&template=整机明细模板.xlsx"></table:importExcel><!-- 导入按钮 -->
 	</shiro:hasPermission>
 	<form:form id="inputForm" modelAttribute="machineOrder" action="${ctx}/checkmodel/productinfo/machineOrder/save" method="post" class="form-horizontal">
 		<input type="hidden" name="type" value="${type }" />
