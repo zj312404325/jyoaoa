@@ -9,6 +9,7 @@ import com.jeeplus.modules.reports.entity.WeeklyReport;
 import com.jeeplus.modules.sys.entity.Post;
 import com.jeeplus.modules.sys.service.PostService;
 import com.jeeplus.modules.sys.utils.DictUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -100,6 +101,14 @@ public class WeeklyReportService extends CrudService<WeeklyReportDao, WeeklyRepo
                 continue;
             }
             if (WeeklyReportDetail.DEL_FLAG_NORMAL.equals(weeklyReportDetail.getDelFlag())){
+                //转义双引号
+                String content = StringEscapeUtils.unescapeHtml4(weeklyReportDetail.getContent());
+                String taskdesc = StringEscapeUtils.unescapeHtml4(weeklyReportDetail.getTaskdesc());
+                String project = StringEscapeUtils.unescapeHtml4(weeklyReportDetail.getProject());
+                weeklyReportDetail.setContent(content);
+                weeklyReportDetail.setTaskdesc(taskdesc);
+                weeklyReportDetail.setProject(project);
+
                 if (StringUtils.isBlank(weeklyReportDetail.getId())){
                     weeklyReportDetail.setWeekflag(0);
                     weeklyReportDetail.setSort(i);
@@ -125,6 +134,14 @@ public class WeeklyReportService extends CrudService<WeeklyReportDao, WeeklyRepo
                 continue;
             }
             if (WeeklyReportDetail.DEL_FLAG_NORMAL.equals(weeklyReportDetail.getDelFlag())){
+                //转义双引号
+                String content = StringEscapeUtils.unescapeHtml4(weeklyReportDetail.getContent());
+                String taskdesc = StringEscapeUtils.unescapeHtml4(weeklyReportDetail.getTaskdesc());
+                String project = StringEscapeUtils.unescapeHtml4(weeklyReportDetail.getProject());
+                weeklyReportDetail.setContent(content);
+                weeklyReportDetail.setTaskdesc(taskdesc);
+                weeklyReportDetail.setProject(project);
+
                 if (StringUtils.isBlank(weeklyReportDetail.getId())){
                     weeklyReportDetail.setWeekflag(1);
                     weeklyReportDetail.setSort(i);
