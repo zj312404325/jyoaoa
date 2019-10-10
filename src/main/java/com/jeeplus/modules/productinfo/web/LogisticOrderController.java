@@ -158,7 +158,7 @@ public class LogisticOrderController extends BaseController {
             //将编辑表单中的非NULL值覆盖数据库记录中的值
             MyBeanUtils.copyBeanNotNull2Bean(logisticOrder, t);
             //明细数量必须和发货数量保持一致
-            if(t.getLogisticOrderDetailList().size()!=t.getQuantity()){
+            if(t.getLogisticOrderDetailList().size()!= 0 && (t.getLogisticOrderDetailList().size()!=t.getQuantity())){
                 addMessage(redirectAttributes, "发货数量和数据条目不一致，保存发货明细失败");
                 return "redirect:"+Global.getAdminPath()+"/checkmodel/productinfo/logisticOrder/logisticOrderIndex?repage=repage&type="+request.getParameter("type");
             }
@@ -170,7 +170,7 @@ public class LogisticOrderController extends BaseController {
         }else{
             //新增表单保存
             //明细数量必须和发货数量保持一致
-            if(logisticOrder.getLogisticOrderDetailList().size()!=logisticOrder.getQuantity()){
+            if(logisticOrder.getLogisticOrderDetailList().size()!= 0 && (logisticOrder.getLogisticOrderDetailList().size()!=logisticOrder.getQuantity())){
                 addMessage(redirectAttributes, "发货数量和数据条目不一致，保存发货明细失败");
                 return "redirect:"+Global.getAdminPath()+"/checkmodel/productinfo/logisticOrder/logisticOrderIndex?repage=repage&type="+request.getParameter("type");
             }
