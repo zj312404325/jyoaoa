@@ -40,11 +40,11 @@
 			<span>固件版本：</span>
 			<form:input path="firmware" class="form-control"/>
 
-			<span>产品名称：</span>
+			<span>项目名称：</span>
 			<form:input path="productName" class="form-control"/>
 
-			<span>内核版本：</span>
-			<form:input path="kernel" class="form-control"/>
+			<%--<span>内核版本：</span>
+			<form:input path="kernel" class="form-control"/>--%>
 
 			<span>系统版本：</span>
 			<form:input path="os" class="form-control"/>
@@ -85,18 +85,18 @@
 		<thead>
 			<tr>
 				<th> <input type="checkbox" class=""></th>
-				<th class="sort-column orderNo">工单号</th>
+				<th class="sort-column orderNo">生产任务单</th>
 				<th class="sort-column quantity">生产数量</th>
 				<th class="sort-column firmware">固件版本</th>
-				<th class="sort-column product_name">产品名称</th>
-				<th class="sort-column ec">EC版本</th>
+				<th class="sort-column product_name">项目名称</th>
+				<th class="sort-column ec">整机料号</th>
 				<th class="sort-column hardware">硬盘规格及数量</th>
-				<th class="sort-column kernel">内核版本</th>
+				<%--<th class="sort-column kernel">内核版本</th>--%>
 				<th class="sort-column ram">内存规格及数量</th>
 				<th class="sort-column os">系统版本</th>
-				<th class="sort-column expand1">扩展卡1规格</th>
+				<%--<th class="sort-column expand1">扩展卡1规格</th>
 				<th class="sort-column gpu">显卡型号</th>
-				<th class="sort-column expand2">扩展卡2规格</th>
+				<th class="sort-column expand2">扩展卡2规格</th>--%>
 				<th class="sort-column a.expect_date">预计上线时间</th>
 				<th class="sort-column a.real_date">实际上线时间</th>
 				<th class="sort-column a.create_date">创建日期</th>
@@ -127,16 +127,16 @@
 				<td>
 					${machineOrder.hardware}
 				</td>
-				<td>
+				<%--<td>
 					${machineOrder.kernel}
-				</td>
+				</td>--%>
 				<td>
 					${machineOrder.ram}
 				</td>
 				<td>
 					${machineOrder.os}
 				</td>
-				<td>
+				<%--<td>
 					${machineOrder.gpu}
 				</td>
 				<td>
@@ -144,12 +144,12 @@
 				</td>
 				<td>
 					${machineOrder.expand2}
+				</td>--%>
+				<td>
+					<fmt:formatDate value="${machineOrder.expectDate}" pattern="yyyy-MM-dd"/>
 				</td>
 				<td>
-					<fmt:formatDate value="${machineOrder.expectDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
-				</td>
-				<td>
-					<fmt:formatDate value="${machineOrder.realDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					<fmt:formatDate value="${machineOrder.realDate}" pattern="yyyy-MM-dd"/>
 				</td>
 				<td>
 					<fmt:formatDate value="${machineOrder.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>

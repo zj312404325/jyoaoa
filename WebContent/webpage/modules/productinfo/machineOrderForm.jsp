@@ -1,6 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ include file="/webpage/include/taglib.jsp"%>
 <html>
+<style type="text/css">
+	.table_list{
+		table-layout:fixed !important;
+	}
+</style>
 <head>
 	<title>主板信息明细管理</title>
 	<meta name="decorator" content="default"/>
@@ -182,7 +187,7 @@
 			   <%--第一行--%>
 			   <tr>
 				   <td class="width-15 active">
-					   <label class="pull-right"><font color="red">*</font>生产工单：</label>
+					   <label class="pull-right"><font color="red">*</font>生产任务单：</label>
 				   </td>
 				   <td class="width-35">
 					   <form:input path="orderNo" htmlEscape="false"    class="form-control required"/>
@@ -234,7 +239,7 @@
 					   <form:input path="firmware" htmlEscape="false"    class="form-control required"/>
 				   </td>
 				   <td class="width-15 active">
-					   <label class="pull-right"><font color="red">*</font>产品名称：</label>
+					   <label class="pull-right"><font color="red">*</font>项目名称：</label>
 				   </td>
 				   <td class="width-35">
 					   <form:input path="productName" htmlEscape="false"    class="form-control required"/>
@@ -244,7 +249,7 @@
 			   <%--第5行--%>
 			   <tr>
 				   <td class="width-15 active">
-					   <label class="pull-right"><font color="red"></font>EC版本：</label>
+					   <label class="pull-right"><font color="red"></font>整机料号：</label>
 				   </td>
 				   <td class="width-35">
 					   <form:input path="ec" htmlEscape="false"    class="form-control "/>
@@ -259,22 +264,28 @@
 
 			   <%--第6行--%>
 			   <tr>
-				   <td class="width-15 active">
+				   <%--<td class="width-15 active">
 					   <label class="pull-right"><font color="red">*</font>内核版本：</label>
 				   </td>
 				   <td class="width-35">
 					   <form:input path="kernel" htmlEscape="false"    class="form-control required"/>
-				   </td>
+				   </td>--%>
 				   <td class="width-15 active">
 					   <label class="pull-right"><font color="red">*</font>内存规格及数量：</label>
 				   </td>
 				   <td class="width-35">
 					   <form:input path="ram" htmlEscape="false"    class="form-control required"/>
 				   </td>
+				   <td class="width-15 active">
+					   <label class="pull-right"><font color="red">*</font>系统版本：</label>
+				   </td>
+				   <td class="width-35">
+					   <form:input path="os" htmlEscape="false"    class="form-control required"/>
+				   </td>
 			   </tr>
 
 			   <%--第7行--%>
-			   <tr>
+			   <%--<tr>
 				   <td class="width-15 active">
 					   <label class="pull-right"><font color="red">*</font>系统版本：</label>
 				   </td>
@@ -287,10 +298,10 @@
 				   <td class="width-35">
 					   <form:input path="expand1" htmlEscape="false"    class="form-control "/>
 				   </td>
-			   </tr>
+			   </tr>--%>
 
 			   <%--第8行--%>
-			   <tr>
+			   <%--<tr>
 				   <td class="width-15 active">
 					   <label class="pull-right"><font color="red"></font>显卡型号：</label>
 				   </td>
@@ -303,7 +314,7 @@
 				   <td class="width-35">
 					   <form:input path="expand2" htmlEscape="false"    class="form-control "/>
 				   </td>
-			   </tr>
+			   </tr>--%>
 
 			   <tr>
 				   <td class="width-15 active"><label class="pull-right text-danger">说明：</label></td>
@@ -316,31 +327,34 @@
 		<!--整机明细 start-->
 		<div class="tabs-container">
 			<ul class="nav nav-tabs">
-				<li class="active"><a data-toggle="tab" href="#tab-2" aria-expanded="true">主板明细</a>
+				<li class="active"><a data-toggle="tab" href="#tab-2" aria-expanded="true">整机明细</a>
 				</li>
 			</ul>
 				<div class="panel-body active">
 			<a class="btn btn-white btn-sm" onclick="addRow('#machineOrderDetailList', machineOrderDetailRowIdx, machineOrderDetailTpl);machineOrderDetailRowIdx = machineOrderDetailRowIdx + 1;" title="新增"><i class="fa fa-plus"></i> 新增</a>
-			<table id="contentTable2" class="table table-striped table-bordered table-condensed dataTable tbdisable">
+			<table id="contentTable2" class="table table-striped table-bordered table-hover"
+				   data-toggle="table"  data-toolbar="#toolbar" data-height="500">
 				<thead>
 					<tr>
-						<th class="hide"></th>
-						<th width="100">整机条码记录</th>
-						<th width="100">主板条码记录</th>
-						<th width="60">配1条码</th>
-						<th width="60">配2条码</th>
-						<th width="60">配3条码</th>
-						<th width="60">配4条码</th>
-						<th width="60">配5条码</th>
-						<th width="60">配6条码</th>
-						<th width="60">配7条码</th>
-						<th width="60">配8条码</th>
-						<th width="60">配9条码</th>
-						<th width="60">配10条码</th>
-						<th width="10">&nbsp;</th>
+						<th width="100" class="hide"></th>
+						<th width="100" >整机条码记录</th>
+						<th width="60" >主板条码记录</th>
+						<th width="60" >配1条码</th>
+						<th width="60" >配2条码</th>
+						<th width="60" >配3条码</th>
+						<th width="60" >配4条码</th>
+						<th width="60" >配5条码</th>
+						<th width="60" >配6条码</th>
+						<th width="60" >配7条码</th>
+						<th width="60" >配8条码</th>
+						<th width="60" >配9条码</th>
+						<th width="60" >配10条码</th>
+						<th width="10" >&nbsp;</th>
 					</tr>
 				</thead>
 				<tbody id="machineOrderDetailList">
+					<tr class="hide">
+					</tr>
 				</tbody>
 			</table>
 			<script type="text/template" id="machineOrderDetailTpl">//<!--

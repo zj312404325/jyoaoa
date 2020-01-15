@@ -182,7 +182,7 @@
 			   <%--第一行--%>
 			   <tr>
 				   <td class="width-15 active">
-					   <label class="pull-right"><font color="red">*</font>生产工单：</label>
+					   <label class="pull-right"><font color="red">*</font>生产任务单：</label>
 				   </td>
 				   <td class="width-35">
 					   <form:input path="orderNo" htmlEscape="false"    class="form-control required"/>
@@ -234,7 +234,7 @@
 					   <form:input path="firmware" htmlEscape="false"    class="form-control required"/>
 				   </td>
 				   <td class="width-15 active">
-					   <label class="pull-right"><font color="red">*</font>产品名称：</label>
+					   <label class="pull-right"><font color="red">*</font>项目名称：</label>
 				   </td>
 				   <td class="width-35">
 					   <form:input path="productName" htmlEscape="false"    class="form-control required"/>
@@ -244,13 +244,13 @@
 			   <%--第5行--%>
 			   <tr>
 				   <td class="width-15 active">
-					   <label class="pull-right"><font color="red">*</font>BOM版本：</label>
+					   <label class="pull-right"><font color="red">*</font>PCBA料号：</label>
 				   </td>
 				   <td class="width-35">
 					   <form:input path="bom" htmlEscape="false"    class="form-control required"/>
 				   </td>
 				   <td class="width-15 active">
-					   <label class="pull-right"><font color="red">*</font>PCB名称：</label>
+					   <label class="pull-right"><font color="red">*</font>PCBA版本：</label>
 				   </td>
 				   <td class="width-35">
 					   <form:input path="pcb" htmlEscape="false"    class="form-control required"/>

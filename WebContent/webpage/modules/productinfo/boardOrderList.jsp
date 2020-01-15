@@ -41,13 +41,13 @@
 			<span>固件版本：</span>
 			<form:input path="firmware" class="form-control"/>
 
-			<span>产品名称：</span>
+			<span>项目名称：</span>
 			<form:input path="productName" class="form-control"/>
 
-			<span>BOM版本：</span>
+			<span>PCBA料号：</span>
 			<form:input path="bom" class="form-control"/>
 
-			<span>PCB版本：</span>
+			<span>PCBA版本：</span>
 			<form:input path="pcb" class="form-control"/>
 
 			<span>开始时间：</span>
@@ -86,12 +86,12 @@
 		<thead>
 			<tr>
 				<th> <input type="checkbox" class=""></th>
-				<th class="sort-column orderno">工单号</th>
+				<th class="sort-column orderno">生产任务单</th>
 				<th class="sort-column quantity">生产数量</th>
 				<th class="sort-column firmware">固件版本</th>
-				<th class="sort-column product_name">产品名称</th>
-				<th class="sort-column bom">BOM版本</th>
-				<th class="sort-column pcb">PCB版本</th>
+				<th class="sort-column product_name">项目名称</th>
+				<th class="sort-column bom">PCBA料号</th>
+				<th class="sort-column pcb">PCBA版本</th>
 				<th class="sort-column a.expect_date">预计上线时间</th>
 				<th class="sort-column a.real_date">实际上线时间</th>
                 <th class="sort-column a.create_date">创建日期</th>
@@ -123,10 +123,10 @@
 					${boardOrder.pcb}
 				</td>
 				<td>
-					<fmt:formatDate value="${boardOrder.expectDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					<fmt:formatDate value="${boardOrder.expectDate}" pattern="yyyy-MM-dd"/>
 				</td>
 				<td>
-					<fmt:formatDate value="${boardOrder.realDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+					<fmt:formatDate value="${boardOrder.realDate}" pattern="yyyy-MM-dd"/>
 				</td>
                 <td>
                     <fmt:formatDate value="${boardOrder.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
